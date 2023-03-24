@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap');
+
+* {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.container-1 {
+    font-size: 1.0rem;
+    text-align: center;
+    background-color: aquamarine;
+    width: 50%;
+    margin: 15px auto;
+    padding: 15px 5px;
+}
+
+.container-2 {
+    font-size: 1.0rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: aquamarine;
+    width: 50%;
+    margin: auto;
+    padding: 5px;
+    flex-direction: column;
+}
+
+.tabsBlock {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    margin: auto;
+}
+
+.tab {
+    padding: 12px 100px;
+    margin: 0px 5px ;
+}
+
+.tab:hover {
+    color: white;
+    background-color: black;
+    cursor: pointer;
+}
+
+.tab-active {
+    color: white;
+    background-color: black;
+}
+
+.tabsContentBlock {
+    /* border: 2px solid black; */
+    width: 78%;
+    margin: 10px 0px;
+    padding: 10px;
+}
+
+.tabContainer {
+    display: none;
+}
+
+.tabContainer-active {
+    display: block;
+}
+
+.authLabel {
+    display: block;
+    margin: 3px 0px;
+}
+
+.authInput {
+    margin: 3px 0px;
+    width: 98%;
+    border: none;
+    padding: 3px;
+}
+
+.password-container {
+    display: flex;
+}
+
+#showHide {
+    width: 22px;
+    margin-left: 5px;
+}
+
+input[type=file]::file-selector-button {
+    display: none;   
+}
+
+.custom-file-upload {
+    cursor: pointer;
+    display: flex;
+    padding-top: 12px;
+    /* border: 2px solid red;  */
+}
+
+#uploadCloud {
+    display: inline;
+    width: 20px;
+    margin-right: 5px;
+}
+
+.authButton {
+    width: 100%;
+    border: none;
+    background-color: aquamarine;
+    font-size: 1rem;
+    padding: 12px 100px;
+    margin-top: 15px;
+}
+.authButton:hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
