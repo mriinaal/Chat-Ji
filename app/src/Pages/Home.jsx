@@ -14,6 +14,7 @@ function Home() {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
     if (!userInfo) history.push("/");
+    else history.push("/chats");
     
   }, [history]);
 
