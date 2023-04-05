@@ -9,8 +9,11 @@ const colors = require('colors');
 const userRoutes = require('./routes/userRoutes');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
+const socketIO = require("socket.io");
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
+const io = socketIO(server);
+
+const cors = require('cors'); //* installing cors middleware heps in communication between url;
 
 const PORT = process.env.PORT;
 
@@ -18,8 +21,14 @@ connectDB();
 
 app.use(express.json()); //* to accept json data
 
+app.use(cors());
+
 app.get(`/`, (req, res)=>{
     res.status(200).send(`API is Running gg`);
+});
+
+io.on('connection', (req, res)=>{
+    // console.log(`User Connected`.green);
 });
 
 app.use('/api/user', userRoutes);

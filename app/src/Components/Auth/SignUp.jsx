@@ -64,6 +64,7 @@ function SignUp() {
         position: "bottom",
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
+      localStorage.setItem("userName", JSON.stringify(data.name));
       history.push("/chats");
     } catch (error) {
       toast({
