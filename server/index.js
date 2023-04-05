@@ -27,19 +27,32 @@ app.get(`/`, (req, res)=>{
     res.status(200).send(`API is Running gg`);
 });
 
-io.on('connection', (req, res)=>{
-    // console.log(`User Connected`.green);
-});
 
 app.use('/api/user', userRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
 
+var users=[{ }];
 
+io.on('connection', (socket)=>{
+    // console.log(`User Connected`.green);
+    socket.on('joined', (data)=>{
+        // console.log(socket.id);
+        users[socket.id] = data.userName;
+        // console.log(users[socket.id]);
+        console.log(`${data.userName} Joined`);
+        socket.broadcast.emit(`userJoined`, {user:`Admin:`, message:`${users[socket.id]} has joined the chat`});
+        socket.emit(`welcome`, {user:`Admin:`, message:`Welcome to the Chat Zone`});
+
+        socket.on('disconnect', ()=>{
+            socket.broadcast.emit('user-disconnect', {user:`Admin:`, message:`${users[socket.id]} Disconnected`} );
+        });
+    });
+});
 
 server.listen(PORT, ()=>{
-    console.log(`> Server Running On Port: ${PORT} <`.yellow);
+    console.log(`> Server Running On Port: http://localhost:${PORT}/ <`.yellow);
 });
 
 // app.listen(PORT, () => {

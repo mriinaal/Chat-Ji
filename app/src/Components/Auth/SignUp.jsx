@@ -205,10 +205,6 @@ function SignUp() {
         <div>
           <button className='authButton' type="button" onClick={submitHandeler}>SIGN-UP</button>
         </div>
-        <div>
-        <button className='authButton'type="reset" value="Reset">CANCEL</button>
-        </div>
-          
       </form>
     </div>
   )

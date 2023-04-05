@@ -1,0 +1,61 @@
+.chatPage{
+    width: 100vw;
+    height: 100vh;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.header{
+    background-color: aquamarine;
+    width: 90%;
+    height: 10%;
+    margin-bottom: 2px;
+}
+
+.chatContainer{
+    background-color: aquamarine;
+    width: 90%;
+    height: 70%;
+}
+
+.chatBox{
+
+}
+
+.inputBox{
+    background-color: aquamarine;
+    width: 90%;
+    height: 10%;
+    margin-top: 2px;
+    display: flex;
+}
+
+#chatInput{
+    width: 90%;
+    outline: none;
+    border-top: 2px solid aquamarine;
+    border-bottom: 2px solid aquamarine;
+    border-left: 2px solid aquamarine;
+    background-color: ghostwhite;
+}
+
+.sendBtn{
+    width: 10%;
+    color: black;
+    transition: all 0.3s;
+}
+.sendBtn > img{
+    width: 65%;
+    color: black;
+    padding-left: 45px;
+    transition: all 0.3s;
+}
+.sendBtn:hover{
+    cursor: pointer;
+    background-color: rgb(46, 234, 171);
+}
+.sendBtn:hover img {
+    transform: translateX(10px);
+}

@@ -2,6 +2,7 @@ import React from 'react'
 import Tabs from '../Components/Tabs';
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import ColorModeSwitcher from '../Components/ColorModeSwitcher';
 
 function Home() {
   useEffect(() => {
@@ -20,12 +21,15 @@ function Home() {
 
   return (
     <>
-      <div className="container-1">
-      &#123; CHAT JI &#125;
+      <div className="container">
+        <div className="container-1">
+        &#123; CHAT JI &#125;
+        </div>
+        <div className="container-2">
+          <Tabs/>
+        </div>
       </div>
-      <div className="container-2">
-        <Tabs/>
-      </div>
+      <div className='ColorModeSwitcher'><ColorModeSwitcher/></div>
     </>
   );
 }
