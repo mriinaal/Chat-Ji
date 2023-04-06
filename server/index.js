@@ -42,12 +42,13 @@ io.on('connection', (socket)=>{
         users[socket.id] = data.userName;
         // console.log(users[socket.id]);
         console.log(`${data.userName} Joined`);
-        socket.emit(`welcome`, {user:`Admin`, message:`Welcome to the Chat Zone`});
+        socket.emit(`welcome`, {user:`Admin`, message:`Welcome to Chat Zone`});
         socket.broadcast.emit(`userJoined`, {user:`Admin`, message:`${users[socket.id]} has joined the chat`});
 
-        socket.on('message', ({message, id}) => {
+        socket.on('message', ({message, id, userPic}) => {
             // console.log(id);
-            io.emit('sendMessage', {user:`${users[id]}`, message, id});
+            // console.log(userPic);
+            io.emit('sendMessage', {user:`${users[id]}`, message, id, userPic});
         });
 
         socket.on('disconnect', ()=>{

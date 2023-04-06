@@ -1,9 +1,33 @@
-.messageBox{
-    width: 30%;
-    padding: 1vmax;
-    margin: 1.8vmax;
-    display: inline-block;
+.messageContainer{
+    width: 20%;
+    display: flex;
     clear: both;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    padding: 3.5px;
+    border-radius: 10px;
+    align-items: center;
+}
+.identity{
+    display: flex;
+    align-items: center;
+}
+.identity > img {
+    width: 30px;
+    border-radius: 40px;
+    margin-right: 4px;
+    overflow: "hidden";
+}
+
+.receiver{
+    display: flex;
+    flex-direction: column;
+    clear: both;    
+}
+.receiver > p{
+    font-size: 12px;
+    margin-left: 10px;
 }
 
 .right{

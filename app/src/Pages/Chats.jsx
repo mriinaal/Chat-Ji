@@ -18,6 +18,7 @@ let socket;
 
 export default function Chats() {
   let userName;
+  let userPic;
 
   useEffect(() => {
     document.title = 'CHAT ZONE';
@@ -33,11 +34,12 @@ export default function Chats() {
   }, [history]);
 
   userName=JSON.parse(localStorage.getItem("userName"));
+  userPic=JSON.parse(localStorage.getItem("userPic"));
 
   const [id, setid] = useState("");
   const send = () => {
     const message =document.getElementById('chatInput').value;
-    socket.emit('message', ({message, id}));
+    socket.emit('message', ({message, id, userPic}));
     document.getElementById('chatInput').value = "";
   }
 
@@ -92,7 +94,7 @@ export default function Chats() {
         <div className='header'></div>
         <div className='chatContainer'>
           <ReactScrollToBottom className='chatBox'>
-            {messages.map((item, i)=> <Message user= {item.id===id?``:item.user} message={item.message} classs={item.id===id?`right`:`left`}/>)}
+            {messages.map((item, i)=> <Message user= {item.id===id?``:item.user} message={item.message} classs={item.id===id?`right`:`left`} pic={item.userPic}/>)}
           </ReactScrollToBottom>
         </div>
         <div className="inputBox">
