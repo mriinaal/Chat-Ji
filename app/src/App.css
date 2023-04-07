@@ -11,35 +11,72 @@
     scrollbar-color: #02626b #250023;
     scroll-behavior: smooth;
 }
+.centered{
+    animation: flick 1.5s infinite alternate;
+    position: fixed;
+    top: 12%;
+    left: 27%;
+    font-size: 18rem;
+}
 
 .container{
+    width: 100vw;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* justify-content: center; */
+    background-color: #000000;
 }
 
 .container-1 {
+    background-image: linear-gradient(to left, #2F7336, #AA3A38);
+    color: white;
     font-size: 1.0rem;
     text-align: center;
-    background-color: aquamarine;
     width: 50%;
     margin-bottom: 20px;
     margin-top: 20px;
-    /* margin: 15px auto; */
     padding: 15px 5px;
+    z-index: 1;
 }
 
+.neon {
+    animation: flick 1.5s infinite alternate;
+    color: #fff;
+    font-size: 1.5rem;
+  }
+ 
+  @keyframes flick {
+    
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+  
+        text-shadow:
+        0 0 4px #fff,
+        0 0 11px #fff,
+        0 0 19px #fff,
+        0 0 40px #0fa,
+        0 0 80px #0fa,
+        0 0 90px #0fa,
+        0 0 100px #0fa,
+        0 0 150px #0fa;
+    
+    }
+    
+    20%, 24%, 55% {        
+        text-shadow: none;
+    }    
+}  
+
 .container-2 {
+    background-image: linear-gradient(to left, #2F7336, #AA3A38);
     font-size: 1.0rem;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    background-color: aquamarine;
     width: 50%;
-    /* margin: auto;
-    padding: 5px; */
     flex-direction: column;
+    box-shadow: 
+    0 0 999px #605C3C;
 }
 
 .tabsBlock {
@@ -51,17 +88,20 @@
 }
 
 .tab {
+    color: white;
     padding: 12px 100px;
     margin: 0px 5px ;
 }
 
 .tab:hover {
+    animation: flick 1.5s infinite alternate;
     color: white;
     background-color: black;
     cursor: pointer;
 }
 
 .tab-active {
+    animation: flick 1.5s infinite alternate;
     color: white;
     background-color: black;
 }
@@ -82,6 +122,7 @@
 }
 
 .authLabel {
+    color: white;
     display: block;
     margin: 3px 0px;
 }
@@ -121,26 +162,20 @@ input[type=file]::file-selector-button {
 }
 
 .authButton {
+    color: white;
     width: 100%;
     border: none;
-    background-color: aquamarine;
     font-size: 1rem;
     padding: 12px 100px;
     margin-top: 15px;
 }
 .authButton:hover {
+    animation: flick 1.5s infinite alternate;
     background-color: black;
     color: white;
     cursor: pointer;
 }
 
-.ColorModeSwitcher{
-    z-index: 10;  
-    position: fixed;  
-    right: -35px;  
-    top: 30px;
-    width: 50px;
-}
 .ColorModeSwitcherButton:hover{
     transform: translateX(-30px);
 }

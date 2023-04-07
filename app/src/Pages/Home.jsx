@@ -2,11 +2,10 @@ import React from 'react'
 import Tabs from '../Components/Tabs';
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import ColorModeSwitcher from '../Components/ColorModeSwitcher';
 
 function Home() {
   useEffect(() => {
-    document.title = 'Chat Ji';
+    document.title = 'CHAT JI';
   }, []);
 
   const history = useHistory();
@@ -22,14 +21,14 @@ function Home() {
   return (
     <>
       <div className="container">
+         {/* <span className='centered'> CHAT </span> */}
         <div className="container-1">
-        &#123; CHAT JI &#125;
+          &#123; CHAT JI &#125;
         </div>
         <div className="container-2">
           <Tabs/>
         </div>
       </div>
-      <div className='ColorModeSwitcher'><ColorModeSwitcher/></div>
     </>
   );
 }

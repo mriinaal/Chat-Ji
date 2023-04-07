@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 import Message from '../Components/Message/Message';
+import { useToast } from "@chakra-ui/react";
 
 import ReactScrollToBottom from "react-scroll-to-bottom";
 
@@ -16,8 +17,20 @@ let socket;
 
 
 export default function Chats() {
+
+  useEffect(() => {
+    let link = document.querySelector("link[rel~='icon']");
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'image/gif';
+      document.getElementsByTagName('head')[0].appendChild(link);
+    }
+    link.href = 'https://res.cloudinary.com/di5oia1wa/image/upload/v1680889446/MK2_xy1vwi.gif';
+  }, []);
+
   let userName;
   let userPic;
+  const toast = useToast();
 
   useEffect(() => {
     document.title = 'CHAT ZONE';
@@ -85,19 +98,35 @@ export default function Chats() {
     }
   }, [messages]);
 
+  const logout =() => {
+    localStorage.clear(); 
+    history.push('/');
+    toast({
+      title: "Logout Successful",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+      position: "bottom",
+    });
+  }
+
+
 
 
   return (
     <>
       <div className='chatPage'>
-        <div className='header'></div>
+        <div className='header'>
+          <p className='neonText'>{`{ CHAT ZONE }`}</p>
+          <img onClick={logout} className="logout" src="https://cdn-icons-png.flaticon.com/512/25/25376.png" alt="LOGOUT"/>
+        </div>
         <div className='chatContainer'>
           <ReactScrollToBottom className='chatBox'>
             {messages.map((item, i)=> <Message user= {item.id===id?``:item.user} message={item.message} classs={item.id===id?`right`:`left`} pic={item.userPic}/>)}
           </ReactScrollToBottom>
         </div>
         <div className="inputBox">
-          <input type="text" id='chatInput' />
+          <input type="text" id='chatInput' placeholder='Send Message..'/>
           <button onClick={send} className='sendBtn'> <img src="http://cdn.onlinewebfonts.com/svg/img_372616.png"alt="send" /> </button>
         </div>
       </div>

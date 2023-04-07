@@ -13,7 +13,49 @@
     width: 89vw;
     height: 10%;
     box-shadow: -1px 4px 4px black;
+    padding-left: 15px;
+    padding-right: 15px;
     z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.neonText{
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.5rem;
+    animation: flicker 1.5s infinite alternate;
+}
+
+@keyframes flicker {
+    
+    0%, 18%, 22%, 25%, 53%, 57%, 99% {
+  
+        text-shadow:
+        0 0 4px #fff,
+        0 0 11px #fff,
+        0 0 19px #fff,
+        0 0 40px #f09,
+        0 0 80px #f09,
+        0 0 90px #f09,
+        0 0 90px #f09,
+        0 0 90px #f09;
+    
+    }
+    
+    20%, 24%, 55% {        
+        text-shadow: none;
+    }    
+}
+
+.logout{
+    width: 1.5rem;
+    filter: invert(100);
+}
+
+.logout:hover{
+    cursor: pointer;
 }
 
 .chatContainer{
@@ -42,12 +84,12 @@
 #chatInput{
     color: white;
     background-image: linear-gradient(to left, #250023, #02626b);
-    border-radius: 10px;
+    border-radius: 1vw;
     padding: 20px;
-    margin-right: 10px;
+    margin-right: 1vw;
     outline: none;
-    width: 70%;
-    height: 1%;
+    width: 70vw;
+    height: 1vh;
 }
 
 .sendBtn{
