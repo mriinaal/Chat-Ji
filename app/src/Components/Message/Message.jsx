@@ -8,12 +8,12 @@ function Message({user, message, classs, pic}) {
                 <div className={`messageContainer ${classs}`}>
                     <div className='identity'>
                     {user === 'Admin' ? (
-                        <img src="https://cdn-icons-png.flaticon.com/128/2840/2840215.png" alt="pfp"/>
+                        <img className='adminPic' src="https://user-images.githubusercontent.com/35910158/35493994-36e2c50e-04d9-11e8-8b38-890caea01850.png" alt="pfp"/>
                     ) : (
                         <img src={pic} alt="pfp"/>
                     )}
                     </div>
-                    <div className={`messageBox ${classs}`}>
+                    <div>
                         {`${message}`} 
                     </div>
                 </div>
@@ -22,11 +22,11 @@ function Message({user, message, classs, pic}) {
     }
     else{
         return (
-            <div className={`  messageContainer ${classs}`}>
+            <div className={`  messageContainerRight ${classs}`}>
                 <div className='identity'>
                     <img src={pic} alt="pfp"/>
                 </div>
-                <div className={`messageBox ${classs}`}>
+                <div>
                     {`${message}`}
                 </div>
             </div>

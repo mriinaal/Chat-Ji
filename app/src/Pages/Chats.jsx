@@ -5,7 +5,6 @@ import socketIO from "socket.io-client";
 
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import ColorModeSwitcher from '../Components/ColorModeSwitcher';
 
 import Message from '../Components/Message/Message';
 
@@ -99,10 +98,9 @@ export default function Chats() {
         </div>
         <div className="inputBox">
           <input type="text" id='chatInput' />
-          <button onClick={send} className='sendBtn'> <img src="https://cdn-icons-png.flaticon.com/512/60/60525.png"alt="send" /> </button>
+          <button onClick={send} className='sendBtn'> <img src="http://cdn.onlinewebfonts.com/svg/img_372616.png"alt="send" /> </button>
         </div>
       </div>
-      <div className='ColorModeSwitcher'><ColorModeSwitcher/></div>
     </>
   );
 };

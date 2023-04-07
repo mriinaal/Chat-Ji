@@ -7,6 +7,9 @@
     font-family: 'JetBrains Mono', monospace;
     color: black;
     font-size: 0.91rem;
+    scrollbar-width:thin;
+    scrollbar-color: #02626b #250023;
+    scroll-behavior: smooth;
 }
 
 .container{
