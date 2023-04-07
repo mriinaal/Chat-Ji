@@ -21,7 +21,6 @@ function Home() {
   return (
     <>
       <div className="container">
-         {/* <span className='centered'> CHAT </span> */}
         <div className="container-1">
           &#123; CHAT JI &#125;
         </div>

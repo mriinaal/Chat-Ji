@@ -23,9 +23,9 @@
 
 .neonText{
     color: #fff;
-    font-weight: 700;
-    font-size: 1.5rem;
-    animation: flicker 1.5s infinite alternate;
+    font-weight: 400;
+    font-size: 1.4rem;
+    animation: flicker 2s infinite alternate;
 }
 
 @keyframes flicker {
