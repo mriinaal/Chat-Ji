@@ -45,9 +45,9 @@
     animation: flick 1.5s infinite alternate;
     color: #fff;
     font-size: 1.5rem;
-  }
+}
  
-  @keyframes flick {
+@keyframes flick {
     
     0%, 18%, 22%, 25%, 53%, 57%, 100% {
   
@@ -76,9 +76,22 @@
     justify-content: space-evenly;
     width: 50%;
     flex-direction: column;
-    box-shadow: 
-    0 0 999px #605C3C;
+    animation: flickBox 1.5s infinite alternate;
 }
+@keyframes flickBox {
+    
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+  
+        box-shadow:
+        0 0 0.5px #fff,
+        0 0 999px #66613e;
+    
+    }
+    
+    20%, 24%, 55% {        
+        box-shadow: none;
+    }    
+}  
 
 .tabsBlock {
     display: flex;

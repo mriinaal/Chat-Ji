@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 import Message from '../Components/Message/Message';
+import Call from '../Components/Call/Call';
+
 import { useToast } from "@chakra-ui/react";
 
 import ReactScrollToBottom from "react-scroll-to-bottom";
@@ -111,12 +113,11 @@ export default function Chats() {
   }
 
 
-
-
   return (
     <>
       <div className='chatPage'>
         <div className='header'>
+          <Call/>
           <p className='neonText'>{`{ CHAT ZONE }`}</p>
           <img onClick={logout} className="logout" src="https://cdn-icons-png.flaticon.com/512/25/25376.png" alt="LOGOUT"/>
         </div>

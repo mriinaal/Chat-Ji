@@ -1,0 +1,12 @@
+#roomId{
+    border: 1px solid blue;
+}
+
+.iFrame{
+    width:100vw;
+    height:100vh;
+    overflow: auto;
+}
+#iFrame{
+    overflow-y: auto;
+}

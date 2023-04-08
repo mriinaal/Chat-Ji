@@ -9,7 +9,7 @@
 }
 
 .header{
-    background-image:linear-gradient(to right, #360033, #0b8793)  ;
+    background-image:linear-gradient(to right, #360033, #0b8793);
     width: 89vw;
     height: 10%;
     box-shadow: -1px 4px 4px black;
@@ -24,7 +24,7 @@
 .neonText{
     color: #fff;
     font-weight: 400;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     animation: flicker 2s infinite alternate;
 }
 
@@ -50,8 +50,10 @@
 }
 
 .logout{
-    width: 1.5rem;
+    width: 1.3rem;
     filter: invert(100);
+    display: inline;
+    margin: 10px;
 }
 
 .logout:hover{
