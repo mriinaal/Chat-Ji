@@ -4,6 +4,7 @@ import hidePwdImg from './hide-password.svg';
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
+import '../../Pages/phone.css';
 
 function SignIn() {
   const toast = useToast();

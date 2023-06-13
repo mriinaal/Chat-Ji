@@ -13,7 +13,7 @@ import { useToast } from "@chakra-ui/react";
 
 import ReactScrollToBottom from "react-scroll-to-bottom";
 
-const ENDPOINT = "http://localhost:5000/";
+const ENDPOINT = "https://chatji.onrender.com/";
 
 let socket;
 

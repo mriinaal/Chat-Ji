@@ -107,3 +107,19 @@
 .sendBtn:hover img {
     transform: translateX(10px);
 }
+
+
+@media only screen and (max-width: 900px) {
+    [class*="header"]{
+        width: 100vw;
+    }
+
+    [class*="chatContainer"]{
+        width: 100%;
+        height: 78%;
+    }
+    
+    [class*="inputBox"]{
+        width: 100%;
+    }
+}

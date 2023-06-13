@@ -1,0 +1,26 @@
+@media only screen and (max-width: 900px) {
+    [class*="container-1"]{
+        width:88%;
+        font-size: 0.85rem;
+    }
+    
+    [class*="container-2"]{
+        width:88%;
+        font-size: 0.85rem;
+    }
+
+    [class*="tab"]{
+        font-size: 0.85rem;
+    }
+
+    [class*="tab-active"]{
+        font-size: 0.85rem;
+    }
+
+    [class*="authButton"]{
+        font-size: 0.85rem;
+        padding: 0%;
+        padding-top: 15px;
+        padding-bottom:15px;
+    }
+}

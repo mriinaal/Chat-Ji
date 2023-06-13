@@ -22,7 +22,7 @@ function Message({user, message, classs, pic}) {
     }
     else{
         return (
-            <div className={`  messageContainerRight ${classs}`}>
+            <div className={`messageContainerRight ${classs}`}>
                 <div className='identity'>
                     <img src={pic} alt="pfp"/>
                 </div>

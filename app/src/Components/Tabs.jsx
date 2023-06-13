@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import '../App.css';
+import '../Pages/phone.css';
 import SignIn from './Auth/SignIn';
 import SignUp from './Auth/SignUp';
 

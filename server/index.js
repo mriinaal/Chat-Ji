@@ -23,12 +23,26 @@ app.use(express.json()); //* to accept json data
 
 app.use(cors());
 
-app.get(`/`, (req, res)=>{
-    res.status(200).send(`API is Running gg`);
-});
-
-
 app.use('/api/user', userRoutes);
+
+//!----------------------------------Deployment----------------------------------!\\ 
+
+const __dirname1 = path.resolve();
+
+if(process.env.NODE_ENV == "production"){
+    app.use(express.static(path.join(__dirname1, "../app/build")));
+
+    app.get('*', (req, res) =>{
+        res.sendFile(path.resolve(__dirname1,"app", "build", "index.html"));
+    });
+}
+else{
+    app.get(`/`, (req, res)=>{
+        res.status(200).send(`API is Running gg`);
+    });
+}
+
+//!----------------------------------Deployment----------------------------------!\\ 
 
 app.use(notFound);
 app.use(errorHandler);
@@ -58,7 +72,7 @@ io.on('connection', (socket)=>{
 });
 
 server.listen(PORT, ()=>{
-    console.log(`> Server Running On Port: http://localhost:${PORT}/ <`.yellow);
+    console.log(`> Server Running On Port: https://chatji.onrender.com <`.yellow);
 });
 
 // app.listen(PORT, () => {

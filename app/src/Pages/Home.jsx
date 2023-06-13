@@ -2,6 +2,7 @@ import React from 'react'
 import Tabs from '../Components/Tabs';
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import './phone.css'
 
 function Home() {
   useEffect(() => {

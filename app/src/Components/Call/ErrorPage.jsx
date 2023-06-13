@@ -2,7 +2,7 @@ import React from 'react'
 
 function ErrorPage() {
   return (
-    <div><h1>ErrorPage</h1></div>
+    <div><h1>Login!</h1></div>
   )
 }
 

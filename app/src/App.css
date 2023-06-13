@@ -11,6 +11,7 @@
     scrollbar-color: #02626b #250023;
     scroll-behavior: smooth;
 }
+
 .centered{
     animation: flick 1.5s infinite alternate;
     position: fixed;
@@ -76,7 +77,7 @@
     justify-content: space-evenly;
     width: 50%;
     flex-direction: column;
-    animation: flickBox 1.5s infinite alternate;
+    /* animation: flickBox 1.5s infinite alternate; */
 }
 @keyframes flickBox {
     
