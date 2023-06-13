@@ -30,10 +30,10 @@ app.use('/api/user', userRoutes);
 const __dirname1 = path.resolve();
 
 if(process.env.NODE_ENV == "production"){
-    app.use(express.static(path.join(__dirname1, "../app/build")));
+    app.use(express.static(path.join(__dirname1, "../app/build-onrender")));
 
     app.get('*', (req, res) =>{
-        res.sendFile(path.resolve(__dirname1,"app", "build", "index.html"));
+        res.sendFile(path.resolve(__dirname1,"app", "build-onrender", "index.html"));
     });
 }
 else{
