@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
+import { useHistory } from "react-router";
 import upload from'./upload.png';
 import showPwdImg from './show-password.svg';
 import hidePwdImg from './hide-password.svg';
-import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
-import { useHistory } from "react-router";
+import { useToast, Spinner } from "@chakra-ui/react";
 
 function SignUp() {
   const toast = useToast();
@@ -15,9 +15,12 @@ function SignUp() {
   const [password, setpassword] = useState('');
   const [confirmpassword, setConfirmPassword] = useState('');
   const [pic, setPic] = useState();
+  const [loading, setLoading] = useState(false);
   
   const submitHandeler = async () => {
+    setLoading(true);
     if (!name || !email || !password || !confirmpassword) {
+      setLoading(false);
       toast({
         title: "Please Fill all the Feilds",
         status: "warning",
@@ -28,6 +31,7 @@ function SignUp() {
       return;
     }
     if (password !== confirmpassword) {
+      setLoading(false);
       toast({
         title: "Passwords Do Not Match",
         status: "warning",
@@ -65,8 +69,11 @@ function SignUp() {
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
       localStorage.setItem("userName", JSON.stringify(data.name));
+      localStorage.setItem("userEmail", JSON.stringify(data.email));
       localStorage.setItem("userPic", JSON.stringify(data.pic));
-      history.push("/chats");
+      localStorage.setItem("token", JSON.stringify(data.token));
+      setLoading(false);
+      history.push("/messages");
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -80,7 +87,9 @@ function SignUp() {
   };
 
   const postDetails = (pics) => {
+    setLoading(true);
     if (pics === undefined) {
+      setLoading(false);
       toast({
         title: "Please Select an Image!",
         status: "warning",
@@ -103,12 +112,14 @@ function SignUp() {
         .then((res) => res.json())
         .then((data) => {
           setPic(data.url.toString());
+          setLoading(false);
           // console.log(data.url.toString());
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
+      setLoading(false);
       toast({
         title: "Please Select an Image!",
         status: "warning",
@@ -149,10 +160,9 @@ function SignUp() {
         />
 
         <label className='authLabel' htmlFor="password" >CREATE PASSWORD:</label>
-        <div className="password-container">
+        <div className="password-container authInput">
         <input
         required
-        className='authInput'
         id='password'
         name="password"
         placeholder="Enter Your Password"
@@ -171,10 +181,9 @@ function SignUp() {
         </div>
 
         <label className='authLabel' htmlFor="confirmPassword" >CONFIRM PASSWORD:</label>
-        <div className="password-container">
+        <div className="password-container authInput">
         <input
         required
-        className='authInput'
         id='confirmPassword'
         name="myConfirmPassword"
         placeholder="Confirm Password"
@@ -203,9 +212,13 @@ function SignUp() {
           accept='image/*'
           onChange={(e) => postDetails(e.target.files[0])}
         />
-        <div>
-          <button className='authButton' type="button" onClick={submitHandeler}>SIGN-UP</button>
-        </div>
+          {loading ? (
+              <div className='authButton'>
+                <Spinner size="sm" color="white" />
+              </div>
+            ) : (
+              <button className='authButton' type="button" onClick={submitHandeler}>SIGN-UP</button>
+            )}
       </form>
     </div>
   )
