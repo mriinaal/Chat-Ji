@@ -38,6 +38,7 @@
     clear: both;    
 }
 .receiver > p{
+    color: white;
     font-size: 12px;
     margin-left: 20px;
 }

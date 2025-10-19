@@ -4,7 +4,7 @@ const generateToken = require('../config/generateToken');
 
 //@description     Get or Search all users
 //@route           GET /api/user?search=
-//@access          Public
+//@access          Restricted
 const allUsers = asyncHandler(async (req, res) => {
     const keyword = req.query.search
       ? {

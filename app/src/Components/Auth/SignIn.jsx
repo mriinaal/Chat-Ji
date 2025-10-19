@@ -18,7 +18,7 @@ function SignIn() {
     if (!email || !password) {
       setLoading(false);
       toast({
-        title: "Please Fill all the Feilds",
+        title: "PLEASE FILL ALL THE FIELDS!",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -43,13 +43,14 @@ function SignIn() {
         
       // console.log(JSON.stringify(data));
       toast({
-        title: "Login Successful",
+        title: "LOGIN SUCCESSFUL!",
         status: "success",
         duration: 5000,
         isClosable: true,
         position: "bottom",
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
+      localStorage.setItem("userId", JSON.stringify(data._id));
       localStorage.setItem("userName", JSON.stringify(data.name));
       localStorage.setItem("userPic", JSON.stringify(data.pic));
       localStorage.setItem("userEmail", JSON.stringify(data.email));
@@ -58,7 +59,7 @@ function SignIn() {
       history.push("/messages");
     } catch (error) {
       toast({
-        title: "Error Occured!",
+        title: "ERROR OCCURED!",
         description: error.response.data.message,
         status: "error",
         duration: 5000,
@@ -79,7 +80,7 @@ function SignIn() {
         id='signInemail' 
         className='authInput' 
         type='email'
-        placeholder='Enter Your E-mail'
+        placeholder='ENTER YOUR E-MAIL'
         name='email'
         onChange={(e)=> setemail(e.target.value)}
         value={email} 
@@ -92,7 +93,7 @@ function SignIn() {
         
         id='signInpassword'
         name="password"
-        placeholder="Enter Your Password"
+        placeholder="ENTER YOUR PASSWORD"
         type={isRevealPwd ? "text" : "password"}
         value={password}
         onChange={e => setPassword(e.target.value)}

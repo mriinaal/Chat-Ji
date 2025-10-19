@@ -13,6 +13,8 @@ const colors = require('colors');
 
 const userRoutes = require('./routes/userRoutes');
 app.use('/api/user', userRoutes);
+const chatRoutes = require('./routes/chatRoutes');
+app.use('/api/chat', chatRoutes);
 
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 app.use(notFound);

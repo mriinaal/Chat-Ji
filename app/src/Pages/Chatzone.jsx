@@ -9,7 +9,7 @@ import { useHistory } from "react-router-dom";
 import Message from '../Components/Message/Message';
 import Call from '../Components/Call/Call';
 
-import { useToast } from "@chakra-ui/react";
+import { useToast, Tooltip } from "@chakra-ui/react";
 
 import ReactScrollToBottom from "react-scroll-to-bottom";
 
@@ -110,7 +110,9 @@ export default function Chatzone() {
         <div className='header'>
           <Call/>
           <p className='neonText'>{`{ CHAT ZONE }`}</p>
-          <img onClick={logout} className="logout" src="https://cdn-icons-png.flaticon.com/512/25/25376.png" alt="LOGOUT"/>
+          <Tooltip label='Logout'>
+            <img onClick={logout} className="logout" src="https://cdn-icons-png.flaticon.com/512/25/25376.png" alt="LOGOUT"/>
+          </Tooltip>
         </div>
         <div className='chatContainer'>
           <ReactScrollToBottom className='chatBox'>
@@ -120,7 +122,9 @@ export default function Chatzone() {
         <div className="inputBox">
           <div id="chatInput">  
             <input type="text" id="sendInput" placeholder='Send Message..'/>
-            <button onClick={send} className='sendBtn'> <img src="https://cdn-icons-png.flaticon.com/128/3177/3177384.png"alt="send" /> </button>
+            <Tooltip label='Send'>
+              <button onClick={send} className='sendBtn'> <img src="https://cdn-icons-png.flaticon.com/128/3177/3177384.png"alt="send" /> </button>
+            </Tooltip>
           </div>
         </div>
       </div>

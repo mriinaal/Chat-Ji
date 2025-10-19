@@ -22,7 +22,7 @@ function SignUp() {
     if (!name || !email || !password || !confirmpassword) {
       setLoading(false);
       toast({
-        title: "Please Fill all the Feilds",
+        title: "PLEASE FILL ALL THE FIELDS",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -33,7 +33,7 @@ function SignUp() {
     if (password !== confirmpassword) {
       setLoading(false);
       toast({
-        title: "Passwords Do Not Match",
+        title: "PASSWORDS DO NOT MATCH",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -61,13 +61,14 @@ function SignUp() {
 
       // console.log(data);
       toast({
-        title: "Registration Successful",
+        title: "REGEISTRATION SUCCESSFUL",
         status: "success",
         duration: 5000,
         isClosable: true,
         position: "bottom",
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
+      localStorage.setItem("userId", JSON.stringify(data._id));
       localStorage.setItem("userName", JSON.stringify(data.name));
       localStorage.setItem("userEmail", JSON.stringify(data.email));
       localStorage.setItem("userPic", JSON.stringify(data.pic));
@@ -76,7 +77,7 @@ function SignUp() {
       history.push("/messages");
     } catch (error) {
       toast({
-        title: "Error Occured!",
+        title: "ERROR OCCURED!",
         description: error.response.data.message,
         status: "error",
         duration: 5000,
@@ -91,7 +92,7 @@ function SignUp() {
     if (pics === undefined) {
       setLoading(false);
       toast({
-        title: "Please Select an Image!",
+        title: "PLEASE SELECT AN IMAGE!",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -121,7 +122,7 @@ function SignUp() {
     } else {
       setLoading(false);
       toast({
-        title: "Please Select an Image!",
+        title: "PLEASE SELECT A VALID IMAGE!",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -141,7 +142,7 @@ function SignUp() {
         id='name' 
         className='authInput' 
         type="text"
-        placeholder='Enter Your Name' 
+        placeholder='ENTER YOUR NAME' 
         name='name'
         onChange={(e)=> setname(e.target.value)}
         value={name}
@@ -153,7 +154,7 @@ function SignUp() {
         id='email' 
         className='authInput' 
         type='email'
-        placeholder='Enter Your E-mail'
+        placeholder='ENTER YOUR E-MAIL'
         name='email'
         onChange={(e)=> setemail(e.target.value)}
         value={email} 
@@ -165,7 +166,7 @@ function SignUp() {
         required
         id='password'
         name="password"
-        placeholder="Enter Your Password"
+        placeholder="ENTER YOUR PASSWORD"
         type={isRevealPwd ? "text" : "password"}
         value={password}
         onChange={e => setpassword(e.target.value)}
@@ -186,7 +187,7 @@ function SignUp() {
         required
         id='confirmPassword'
         name="myConfirmPassword"
-        placeholder="Confirm Password"
+        placeholder="CONFIRM YOUR PASSWORD"
         type={isRevealPwd ? "text" : "password"}
         value={confirmpassword}
         onChange={e => setConfirmPassword(e.target.value)}
