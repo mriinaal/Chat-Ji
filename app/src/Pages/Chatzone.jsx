@@ -123,7 +123,7 @@ export default function Chatzone() {
           <div id="chatInput">  
             <input type="text" id="sendInput" placeholder='Send Message..'/>
             <Tooltip label='Send'>
-              <button onClick={send} className='sendBtn'> <img src="https://cdn-icons-png.flaticon.com/128/3177/3177384.png"alt="send" /> </button>
+              <button onClick={send} className='sendBtn'> <img src="https://cdn-icons-png.flaticon.com/128/9380/9380620.png"alt="send" /> </button>
             </Tooltip>
           </div>
         </div>

@@ -87,13 +87,12 @@
     align-items: center;
     justify-content: space-between;
     color: white;
-    background-image:linear-gradient(to left, #2F7336, #AA3A38);
-    border-radius: 1vw;
+    border-radius: 0vw;
     padding: 25px;
-    margin-right: 1vw;
     outline: none;
     width: 75%;
     height: 1vh;
+    border: 1px solid white;
 }
 #sendInput{
     height: 50px;

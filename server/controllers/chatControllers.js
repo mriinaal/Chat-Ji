@@ -7,12 +7,13 @@ const Chat = require('../Models/chatModel');
 const userChats = asyncHandler(async (req, res) => {
     const userId = req.query.user; 
     if (!userId) {
-        return res.status(400).json({ message: "User ID is required." });
+        return res.status(400).json({ message: "USER ID IS REQUIRED." });
     }
     const chats = await Chat.find({ 
       users: userId 
     })
     .populate('users', 'name email pic')
+    .sort({ updatedAt: -1 });
 
     res.status(200).json(chats); 
 });
