@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Spinner, useToast, Button, Input, Skeleton, SkeletonCircle, Box, useDisclosure } from "@chakra-ui/react";
+import { useToast, Skeleton, SkeletonCircle, Box } from "@chakra-ui/react";
 import { useLocation } from 'react-router-dom';
 
-function UserChats({ reload, loadChat }) {
+function UserChats({ reload, loadChat, setMessages, setChatsLoading }) {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const userId = JSON.parse(localStorage.getItem("userId"));
     const toast = useToast();
@@ -11,39 +11,70 @@ function UserChats({ reload, loadChat }) {
     const [chats, setChats] = useState([]);
     const location = useLocation();
 
-    const fetchChats = async () => {
-        try {
-        setLoading(true);        
-        const config = {
-            headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${userInfo.token}`,
-            },
-        };
-        const {data} = await axios.get(
-            "/api/chat?user=" + userId,
-            config
-        );
-        setChats(data)
-        setLoading(false);
-    } catch (error) {
-        toast({
-            title: "ERROR OCCURED WHILE FETCHING CHATS!",
-            description: error.message,
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-            position: "bottom",
-        });
-    }finally{
-        setLoading(false);
-    }
-    };
-
     useEffect(() => {
+        const fetchChats = async () => {
+            if(!userInfo)return;
+            try {
+                setLoading(true);        
+                const config = {
+                    headers: {
+                    "Content-type": "application/json",
+                    Authorization: `Bearer ${userInfo.token}`,
+                    },
+                };
+                const {data} = await axios.get(
+                    "/api/chat?user=" + userId,
+                    config
+                );
+                setChats(data)
+                data.forEach(chat => {
+                    fetchMessages(chat);
+                });
+                setLoading(false);
+            } catch (error) {
+                toast({
+                    title: "ERROR OCCURED WHILE FETCHING CHATS!",
+                    description: error.message,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "bottom",
+                });
+            }finally{
+                setLoading(false);
+            }
+        };
         fetchChats();
-    }, [reload]);
+    }, [reload, location]);
 
+    const fetchMessages = async (chat) => {
+        if(!userInfo)return;
+        try {
+            setChatsLoading(true);        
+            const config = {
+                headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer ${userInfo.token}`,
+                },
+            };
+            const {data} = await axios.get(
+                "/api/message?chat=" + chat._id,
+                config
+            );
+            setMessages(data);
+        } catch (error) {
+            toast({
+                title: "ERROR OCCURED WHILE FETCHING CHATS!",
+                description: error.message,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+        }finally{
+            setChatsLoading(false);
+        }
+    };
 
     return (
         <Box height={'100%'} width="100%" color='white' overflow='auto'>
@@ -66,15 +97,15 @@ function UserChats({ reload, loadChat }) {
                 </Box>
             ) : (
                 chats.map((chat) => {
-                    const isGroupChat = chat.isGroupChat; 
+                    const isGroupChat = chat.isGroupChat;
                     const chatPic = isGroupChat ? 
                                     "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg" : 
                                     chat.users.find(user => user._id !== userId).pic
                     const chatName = isGroupChat ? chat.chatName : chat.users.find(user => user._id !== userId).name
-
+                    const userMail = isGroupChat ? null : chat.users.find(user => user._id !== userId).email
                     return (
                         <Box 
-                            onClick={() => loadChat([chat._id,chatName,chatPic])} 
+                            onClick={() => loadChat([chat._id,chatName,chatPic,userMail,isGroupChat])} 
                             cursor="pointer" 
                             _hover={{ bg: "grey" }} 
                             key={chat._id} 

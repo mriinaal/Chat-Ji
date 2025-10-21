@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { Spinner, useToast, Button, Input, Box, useDisclosure, color } from "@chakra-ui/react";
+import { Spinner, useToast, Button, Input, Box, useDisclosure } from "@chakra-ui/react";
 import {
   Modal,
   ModalOverlay,
@@ -90,10 +90,9 @@ function Newchat({renderUserChats}) {
                 Authorization: `Bearer ${userInfo.token}`,
                 },
             };
-            const response = await axios.post(
+            await axios.post(
                 "/api/chat/", newChatData,
                 config
-                
             );
             toast({
                 title: "CHAT CREATED SUCCESSFULLY!",

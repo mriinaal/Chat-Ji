@@ -19,6 +19,9 @@ const ENDPOINT = process.env.REACT_APP_ENV === PROD?"https://chatji.onrender.com
 let socket;
 
 export default function Chatzone() {
+  useEffect(() => {
+    document.title = 'CHAT ZONE | Chat-Ji';
+  }, []);
 
   useEffect(() => {
     let link = document.querySelector("link[rel~='icon']");
@@ -34,9 +37,6 @@ export default function Chatzone() {
   let userPic;
   const toast = useToast();
 
-  useEffect(() => {
-    document.title = 'CHAT ZONE | Chat-Ji';
-  }, []);
 
   const history = useHistory();
 

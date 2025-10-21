@@ -41,27 +41,64 @@ else app.get(`/`, (req, res)=>res.status(200).send(`Blame it on me`));
 //!----------------------------------Deployment----------------------------------!\\ 
 
 //!------------------------------------Socket------------------------------------!\\ 
-var users=[{ }];
+var users=[];
 io.on('connection', (socket)=>{
     // console.log(`User Connected`.green);
-    socket.on('joined', (data)=>{
-        // console.log(socket.id);
-        users[socket.id] = data.userName;
-        // console.log(users[socket.id]);
-        // console.log(`${data.userName} Joined`);
-        socket.emit(`welcome`, {user:`Admin`, message:`Welcome to Chat Zone`});
-        socket.broadcast.emit(`sendMessage`, {user:`Admin`, message:`${users[socket.id]} has joined the chat`});
+    // console.log(`User Connected: ${socket.id}`);
 
-        socket.on('message', ({message, id, userPic}) => {
-            // console.log(id);
-            // console.log(userPic);
-            io.emit('sendMessage', {user:`${users[id]}`, message, id, userPic});
-        });
+    socket.on('joined', (userEmail) => {
+        // Check if the user is already in the list
+        const userIndex = users.findIndex(user => user.id === socket.id);
+        
+        if (userIndex === -1) {
+            // Add new user if not present
+            users.push({ id: socket.id, email: userEmail });
+        } else {
+            // Update existing user if necessary (optional)
+            users[userIndex].email = userEmail;
+        }
 
-        socket.on('disconnect', ()=>{
-            socket.broadcast.emit('sendMessage', {user:`Admin`, message:`${users[socket.id]} Disconnected`});
-        });
+        const onlineUsers = users.map(online => online.email).flat();
+        // console.log(onlineUsers); // Log users array
+        io.emit('status', onlineUsers); // Emit new user status
     });
+
+    socket.on('message', ({ chat, _id, message, userName, userEmail, userPic }) => {
+        // console.log(chat, message);
+        io.emit('sendMessage', {chat, _id, message, userName, userEmail, userPic});
+    });
+
+    socket.on('disconnect', () => {
+        // Remove user from the array on disconnect
+        const userIndex = users.findIndex(user => user.id === socket.id);
+        if (userIndex !== -1) {
+            users.splice(userIndex, 1);
+            const onlineUsers = users.map(online => online.email).flat();
+            // console.log(onlineUsers);
+            socket.broadcast.emit('status', onlineUsers); // Emit updated user list
+        }
+        // console.log(users);
+        // console.log(`User Disconnected: ${socket.id}`);
+    });
+
+    // socket.on('joined', (data)=>{
+    //     // console.log(socket.id);
+    //     users[socket.id] = data.userName;
+    //     // console.log(users[socket.id]);
+    //     // console.log(`${data.userName} Joined`);
+    //     socket.emit(`welcome`, {user:`Admin`, message:`Welcome to Chat Zone`});
+    //     socket.broadcast.emit(`sendMessage`, {user:`Admin`, message:`${users[socket.id]} has joined the chat`});
+
+    //     // socket.on('message', ({message, socketId, userPic}) => {
+    //     //     // console.log(id);
+    //     //     // console.log(userPic);
+    //         io.emit('sendMessage', {user:`${users[socketId]}`, message, socketId, userPic});
+    //     // });
+
+    //     socket.on('disconnect', ()=>{
+    //         socket.broadcast.emit('sendMessage', {user:`Admin`, message:`${users[socket.id]} Disconnected`});
+    //     });
+    // });
 });
 //!------------------------------------Socket------------------------------------!\\ 
 

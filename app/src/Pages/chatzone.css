@@ -107,7 +107,7 @@
 }
 
 .sendBtn{
-    margin-left: 10px;
+    margin-left: 5px;
 }
 .sendBtn > img{
     width: 30px;
@@ -116,6 +116,31 @@
 .sendBtn:hover{
     cursor: pointer;
     transform: translatex(5px);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.chatsLoading-box {
+    width: 70vw;
+    height: 85vh;
+    color: #AA3A38;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    font-size: 1.7em;
+    font-weight: bold;
+    animation: fadeIn 1s linear;
 }
 
 @media only screen and (max-width: 900px) {

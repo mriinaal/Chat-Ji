@@ -12,15 +12,24 @@ const viewMessages = asyncHandler(async (req, res) => {
     const messages = await Message.find({ 
       chat: chatId 
     })
-    .populate('messages.user', '_id name pic')
+    .populate('messages.user', '_id name email pic')
 
      // Flattening the response to get just the messages array
     const allMessages = messages.map(chat => chat.messages).flat();
 
     // Sort messages in ascending order based on `sentAt`
-    allMessages.sort((a, b) => new Date(a.sentAt) - new Date(b.sentAt)); 
+    // allMessages.sort((a, b) => new Date(a.sentAt) - new Date(b.sentAt)); 
 
-    res.status(200).json(allMessages);
+    const transformedMessages = allMessages.map(msg => ({
+        chat:chatId,
+        _id:msg._id,
+        message: msg.message,
+        userName: msg.user.name,
+        userEmail: msg.user.email,
+        userPic: msg.user.pic,
+    }));
+
+    res.status(200).json(transformedMessages);
 });
 
 //@description     Create new message

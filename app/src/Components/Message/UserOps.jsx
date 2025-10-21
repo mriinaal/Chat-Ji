@@ -1,4 +1,5 @@
 import { useToast, Button, Box } from "@chakra-ui/react";
+import { useUserInfo } from "../../Context/UserInfoProvider";
 
 function UserOps() {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
