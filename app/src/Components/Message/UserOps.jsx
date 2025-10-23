@@ -17,7 +17,7 @@ function UserOps() {
             <img 
             src={userPic} 
             alt={`pfp`} 
-            style={{ width: '45px', height: '45px', borderRadius: '50%', marginRight: '10px', display: 'inline' }} 
+            style={{ width: '45px', height: '45px', borderRadius: '50%', display: 'inline' }} 
             />
         </>
     );

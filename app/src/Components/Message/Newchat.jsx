@@ -119,7 +119,7 @@ function Newchat({renderUserChats}) {
 
     return (
         <>
-            <Box display={'flex'} alignItems={'center'} justifyContent={'center'} height='100%'>
+            <Box className="newChatButton" display={'flex'} alignItems={'center'} justifyContent={'center'} height='100%'>
                 <Button 
                     width={'100%'}
                     height={'100%'}
@@ -132,7 +132,7 @@ function Newchat({renderUserChats}) {
                     _hover={{ bg: 'black', color: 'white' }} 
                 >
                     NEW CHAT
-                    <img 
+                    <img className="newChatImage"
                         src="https://cdn-icons-png.flaticon.com/128/11741/11741042.png" 
                         alt="icon" 
                         style={{ width: '24px', height: '24px', marginLeft: '8px' }} 

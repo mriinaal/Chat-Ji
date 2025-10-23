@@ -3,13 +3,14 @@ import axios from "axios";
 import { useToast, Skeleton, SkeletonCircle, Box } from "@chakra-ui/react";
 import { useLocation } from 'react-router-dom';
 
-function UserChats({ reload, loadChat, setMessages, setChatsLoading }) {
+function UserChats({ onlineUsers, setChatsList, reload, loadChat, setMessages, setChatsLoading }) {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const userId = JSON.parse(localStorage.getItem("userId"));
     const toast = useToast();
     const [loading, setLoading] = useState(false);
-    const [chats, setChats] = useState([]);
     const location = useLocation();
+    const [chats, setChats] = useState([]);
+
 
     useEffect(() => {
         const fetchChats = async () => {
@@ -29,6 +30,7 @@ function UserChats({ reload, loadChat, setMessages, setChatsLoading }) {
                 setChats(data)
                 data.forEach(chat => {
                     fetchMessages(chat);
+                    setChatsList(chatsList =>[...chatsList, chat._id]);
                 });
                 setLoading(false);
             } catch (error) {
@@ -102,10 +104,10 @@ function UserChats({ reload, loadChat, setMessages, setChatsLoading }) {
                                     "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg" : 
                                     chat.users.find(user => user._id !== userId).pic
                     const chatName = isGroupChat ? chat.chatName : chat.users.find(user => user._id !== userId).name
-                    const userMail = isGroupChat ? null : chat.users.find(user => user._id !== userId).email
+                    const userEmail = isGroupChat ? null : chat.users.find(user => user._id !== userId).email
                     return (
                         <Box 
-                            onClick={() => loadChat([chat._id,chatName,chatPic,userMail,isGroupChat])} 
+                            onClick={() => loadChat([chat._id,chatName,chatPic,userEmail,isGroupChat])} 
                             cursor="pointer" 
                             _hover={{ bg: "grey" }} 
                             key={chat._id} 
@@ -115,9 +117,14 @@ function UserChats({ reload, loadChat, setMessages, setChatsLoading }) {
                             <img 
                                 src={chatPic} 
                                 alt={`pfp`} 
-                                style={{ width: '45px', height: '45px', borderRadius: '50%', marginRight: '10px', display: 'inline' }} 
+                                style={{ width: '45px', height: '45px', borderRadius: '50%', marginRight: '0px', display: 'inline' }} 
                             />
-                            <Box>
+                            {onlineUsers.includes(userEmail) ? (
+                                    <span style={{transform: 'translateX(-65%) translateY(65%)', color: 'green' }}>🟢</span>
+                                ) : (
+                                    <span style={{transform: 'translateX(-65%) translateY(65%)', color: 'red' }}>🔴</span>
+                            )}
+                            <Box className="chatUsersName">
                                 <h3 style={{ color: 'white', margin: '0' }}>
                                     {chatName}
                                 </h3>
