@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useToast, Skeleton, SkeletonCircle, Box } from "@chakra-ui/react";
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { useLocation } from 'react-router-dom';
 
-function UserChats({ onlineUsers, setChatsList, reload, loadChat, setMessages, setChatsLoading }) {
+function UserChats({ onlineUsers, chatsList, setChatsList, reload, loadChat, setMessages, setLastMsg, setChatsLoading, chats, setChats, updateLatestMessages }) {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const userId = JSON.parse(localStorage.getItem("userId"));
     const toast = useToast();
     const [loading, setLoading] = useState(false);
     const location = useLocation();
-    const [chats, setChats] = useState([]);
-
+    const [firstFetchChat, setFirstFetchChat] = useState(true);
 
     useEffect(() => {
         const fetchChats = async () => {
             if(!userInfo)return;
             try {
-                setLoading(true);        
+                if(firstFetchChat){
+                    setLoading(true);
+                }        
                 const config = {
                     headers: {
                     "Content-type": "application/json",
@@ -27,13 +29,20 @@ function UserChats({ onlineUsers, setChatsList, reload, loadChat, setMessages, s
                     "/api/chat?user=" + userId,
                     config
                 );
-                setChats(data)
+                // console.log(data);
+                setChats(data);
                 data.forEach(chat => {
-                    fetchMessages(chat);
-                    setChatsList(chatsList =>[...chatsList, chat._id]);
+                    if(!chatsList.includes(chat._id)){
+                        setChatsList(chatsList =>[...chatsList, chat._id]);
+                        if(firstFetchChat){
+                            fetchMessages(chat);
+                        }
+                    }
                 });
+                setFirstFetchChat(false);
                 setLoading(false);
             } catch (error) {
+                setLoading(false);
                 toast({
                     title: "ERROR OCCURED WHILE FETCHING CHATS!",
                     description: error.message,
@@ -47,7 +56,7 @@ function UserChats({ onlineUsers, setChatsList, reload, loadChat, setMessages, s
             }
         };
         fetchChats();
-    }, [reload, location]);
+    }, [location, reload]);
 
     const fetchMessages = async (chat) => {
         if(!userInfo)return;
@@ -60,10 +69,32 @@ function UserChats({ onlineUsers, setChatsList, reload, loadChat, setMessages, s
                 },
             };
             const {data} = await axios.get(
-                "/api/message?chat=" + chat._id,
+                "/api/message?user=" + chat._id,
                 config
             );
-            setMessages(data);
+            data.forEach(msg => {
+                const chatId = msg.chat._id;
+                const isGroupChat = msg.chat.isGroupChat;
+                const chatPic = isGroupChat ? 
+                                "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg" : 
+                                chat.users.find(user => user._id !== userId).pic
+                const chatName = isGroupChat ? msg.chat.chatName : chat.users.find(user => user._id !== userId).name
+                const chatUserId = isGroupChat ? msg.chat.users : chat.users.find(user => user._id !== userId)._id
+
+                // console.log(msg);
+
+                const chatArray = [chatId, chatName, chatPic, chatUserId, isGroupChat];
+                const msgObj = {
+                    chat: chatArray,
+                    message: msg.message,
+                    userId: msg.userId,
+                    userName: msg.userName,
+                    userPic: msg.userPic,
+                    _id : msg._id
+                }
+                setMessages(prevMessage => [...prevMessage, msgObj]);
+                setLastMsg(msgObj);
+            });
         } catch (error) {
             toast({
                 title: "ERROR OCCURED WHILE FETCHING CHATS!",
@@ -98,16 +129,24 @@ function UserChats({ onlineUsers, setChatsList, reload, loadChat, setMessages, s
                     ))}
                 </Box>
             ) : (
-                chats.map((chat) => {
+                <TransitionGroup>
+                {chats.map((chat) => {
                     const isGroupChat = chat.isGroupChat;
                     const chatPic = isGroupChat ? 
                                     "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg" : 
                                     chat.users.find(user => user._id !== userId).pic
                     const chatName = isGroupChat ? chat.chatName : chat.users.find(user => user._id !== userId).name
-                    const userEmail = isGroupChat ? null : chat.users.find(user => user._id !== userId).email
+                    const chatUserId = isGroupChat ? chat.users : chat.users.find(user => user._id !== userId)._id
+                    const latestMessage = chat.latestMessage;
+                    
                     return (
+                        <CSSTransition
+                            key={chat._id}
+                            timeout={300} // Duration of animation
+                            classNames="chat-item"
+                        >
                         <Box 
-                            onClick={() => loadChat([chat._id,chatName,chatPic,userEmail,isGroupChat])} 
+                            onClick={() => loadChat([chat._id,chatName,chatPic,chatUserId,isGroupChat])} 
                             cursor="pointer" 
                             _hover={{ bg: "grey" }} 
                             key={chat._id} 
@@ -119,22 +158,36 @@ function UserChats({ onlineUsers, setChatsList, reload, loadChat, setMessages, s
                                 alt={`pfp`} 
                                 style={{ width: '45px', height: '45px', borderRadius: '50%', marginRight: '0px', display: 'inline' }} 
                             />
-                            {onlineUsers.includes(userEmail) ? (
+                            {
+                            isGroupChat ?
+                                <span style={{transform: 'translateX(-65%) translateY(65%)', color: 'green' }}>&nbsp;&nbsp;</span>
+                            : 
+                                onlineUsers.includes(chatUserId) ? (
                                     <span style={{transform: 'translateX(-65%) translateY(65%)', color: 'green' }}>🟢</span>
                                 ) : (
                                     <span style={{transform: 'translateX(-65%) translateY(65%)', color: 'red' }}>🔴</span>
-                            )}
+                                )
+                            }
                             <Box className="chatUsersName">
                                 <h3 style={{ color: 'white', margin: '0' }}>
                                     {chatName}
                                 </h3>
-                                <h3 style={{ color: 'white', margin: '0' }}>
-                                    {chat.latestMessage}
-                                </h3>
+                                
+                                    {
+                                        (latestMessage!==null && latestMessage!==undefined) ?
+                                        <h3 style={{ color: 'white', margin: '0' }}>
+                                            {latestMessage.userId === userId ? "You: " : isGroupChat?(latestMessage.userName+": "):""}
+                                            {latestMessage.message}
+                                        </h3>
+                                        :""
+                                    }
+                                    
                             </Box>
                         </Box>
+                        </CSSTransition>
                     );
-                })
+                })}
+                </TransitionGroup>
             )}
         </Box>
     );

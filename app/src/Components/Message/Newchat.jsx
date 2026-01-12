@@ -55,6 +55,7 @@ function Newchat({renderUserChats}) {
             setSearchResult(response.data); 
             setLoading(false);
         } catch (error) {
+            setLoading(false);
             toast({
                 title: "ERROR OCCURED!",
                 description: error.response.data.message,
@@ -90,10 +91,11 @@ function Newchat({renderUserChats}) {
                 Authorization: `Bearer ${userInfo.token}`,
                 },
             };
-            await axios.post(
+            const {data} = await axios.post(
                 "/api/chat/", newChatData,
                 config
             );
+            // console.log(data);
             toast({
                 title: "CHAT CREATED SUCCESSFULLY!",
                 status: "success",

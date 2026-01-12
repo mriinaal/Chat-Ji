@@ -30,21 +30,22 @@ const createChat = asyncHandler(async (req, res) => {
     if (existingChat) {
         return res.status(400).json({ message: "CHAT ALREADY EXISTS" });
     }
-    const chat = await Chat.create({
+    const newChat = await Chat.create({
       chatName, 
       isGroupChat, 
       users, 
       latestMessage: null, 
       groupAdmin,
     });
-    if (chat) {
+    if (newChat) {
         res.status(201).json({
-            _id: chat._id,
-            chatName: chat.chatName,
-            isGroupChat: chat.isGroupChat,
-            users: chat.users,
-            latestMessage: chat.latestMessage, 
-            groupAdmin: chat.groupAdmin,
+            _id: newChat._id,
+            chatName: newChat.chatName,
+            isGroupChat: newChat.isGroupChat,
+            users: newChat.users,
+            latestMessage: newChat.latestMessage, 
+            groupAdmin: newChat.groupAdmin,
+            updatedAt: newChat.updatedAt
         });
     } else {
         res.status(400);

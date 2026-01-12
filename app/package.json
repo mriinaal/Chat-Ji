@@ -20,6 +20,7 @@
     "react-router-dom": "^5.3.4",
     "react-scripts": "^5.0.1",
     "react-scroll-to-bottom": "^4.2.0",
+    "react-transition-group": "^4.4.5",
     "socket.io-client": "^4.6.1",
     "source-map-loader": "^4.0.1",
     "web-vitals": "^2.1.4"

@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 function CustomNotificationToast({ latestMsg, loadChat}){
     return(
-        <Box onClick={() => {loadChat([latestMsg.chat, latestMsg.userName, latestMsg.userPic, latestMsg.userMail, latestMsg.isGroupChat]);}}
+        <Box onClick={() => {loadChat([latestMsg.chat[0], latestMsg.userName, latestMsg.userPic, latestMsg.userMail, latestMsg.isGroupChat]);}}
             bg="white"
             boxShadow="md"
             p={4}

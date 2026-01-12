@@ -46,26 +46,49 @@ io.on('connection', (socket)=>{
     // console.log(`User Connected`.green);
     // console.log(`User Connected: ${socket.id}`);
 
-    socket.on('joined', (userEmail) => {
+    socket.on('joined', (userId) => {
         // Check if the user is already in the list
         const userIndex = users.findIndex(user => user.id === socket.id);
         
         if (userIndex === -1) {
             // Add new user if not present
-            users.push({ id: socket.id, email: userEmail });
+            users.push({ id: socket.id, userId: userId });
         } else {
             // Update existing user if necessary (optional)
-            users[userIndex].email = userEmail;
+            users[userIndex].userId = userId;
         }
 
-        const onlineUsers = users.map(online => online.email).flat();
+        if (!socket.rooms.has(userId)) {
+            socket.join(userId);
+        }
+
+        const onlineUsers = users.map(online => online.userId).flat();
         // console.log(onlineUsers); // Log users array
         io.emit('status', onlineUsers); // Emit new user status
     });
 
-    socket.on('message', ({ chat, _id, message, userName, userEmail, userPic }) => {
+    socket.on('message', ({ chat, _id, message, userName, userId, userPic }) => {
         // console.log(chat, message);
-        io.emit('sendMessage', {chat, _id, message, userName, userEmail, userPic});
+        
+        // Check if chat[3] is an array
+        if (chat[4]) { //groupChatVariable
+            // Iterate through all users in the array
+            chat[3].forEach(user => {
+                io.to(user._id).emit('sendMessage', { 
+                    chat, 
+                    _id, 
+                    message, 
+                    userName, 
+                    userId, 
+                    userPic 
+                });
+            });
+        } else {
+            io.to(userId).to(chat[3]).emit('sendMessage', { 
+                chat, _id, message, userName, userId, userPic
+            });
+        }
+        
     });
 
     socket.on('disconnect', () => {
@@ -73,7 +96,7 @@ io.on('connection', (socket)=>{
         const userIndex = users.findIndex(user => user.id === socket.id);
         if (userIndex !== -1) {
             users.splice(userIndex, 1);
-            const onlineUsers = users.map(online => online.email).flat();
+            const onlineUsers = users.map(online => online.userId).flat();
             // console.log(onlineUsers);
             socket.broadcast.emit('status', onlineUsers); // Emit updated user list
         }

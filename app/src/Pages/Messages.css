@@ -1,0 +1,18 @@
+.chat-item-enter {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.chat-item-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+.chat-item-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.chat-item-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 300ms, transform 300ms;
+}

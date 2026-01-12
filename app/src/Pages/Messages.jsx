@@ -47,7 +47,7 @@ function Messages() {
         });
 
         //status
-        socket.emit('joined', (userEmail));
+        socket.emit('joined', (userId));
         const handelStatus = (data) =>{
             setOnlineUsers(data);
             // console.log(data);
@@ -56,11 +56,13 @@ function Messages() {
         
         //Receive messages
         const handleReceiveMessage = (data) => {
+            // console.log(data);
             setMessages(prevMessages => [...prevMessages, data]); // Using functional update
         };
         socket.on("sendMessage", handleReceiveMessage);
     }, []);
 
+    const [chats, setChats] = useState([]);
     const [msgLoading, setMsgLoading] = useState();
     const [chatHistory, setChatHistory] = useState([]);
     useEffect(() => {
@@ -78,9 +80,14 @@ function Messages() {
     const [chatsList, setChatsList] = useState([]);
 
     useEffect(()=>{
+        // console.log(messages);
         const latestMsg = messages[messages.length - 1];
+        updateLatestMessages(latestMsg);
         setLastMsg(latestMsg);
-        if(latestMsg&&latestMsg!==lastMsg&&chatsList.includes(latestMsg.chat)&&latestMsg.chat!==chat[0]&&latestMsg.userEmail!==userEmail){
+        if(latestMsg&&latestMsg!==lastMsg&&!chatsList.includes(latestMsg.chat[0])){
+            renderChats();
+        }
+        if(latestMsg&&latestMsg!==lastMsg&&latestMsg.chat[0]!==chat[0]&&latestMsg.userId!==userId){
             toast({
                 title: latestMsg.userName,
                 description: latestMsg.message,
@@ -90,24 +97,67 @@ function Messages() {
                     <CustomNotificationToast loadChat={loadChat} latestMsg={latestMsg}/>
                 ),
             });                
-        }
+        }   
     },[chat, chatsList, messages, lastMsg])
+
+    const updateLatestMessages = (newMessage) => {
+        if(newMessage !== undefined && newMessage !== null){   
+            const updatedChats = chats.map(chat => {
+                if (newMessage.chat[0] === chat._id) {
+                    return { ...chat, latestMessage: newMessage, updatedAt: Date.now() };
+                }
+                return chat;
+            });
+            const sortedChats = updatedChats.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+            setChats(sortedChats);
+        }
+    };
     
     const send = (chat) => {
         const message=document.getElementById('sendInput').value;
         if(message.trim().length===0)return;
-        socket.emit('message', ({chat, _id:Date.now(), message, userName, userEmail, userPic}));
+        socket.emit('message', ({chat, _id:Date.now(), message, userName, userId, userPic}));
+        updateMsgCollection(chat[0], userId, message);
         document.getElementById('sendInput').value = "";
     } 
+
+    async function updateMsgCollection(chat, user, message){
+        const msgData = {
+            chatId: chat,
+            userId: user,
+            msg: message
+        };
+        try {
+            const config = {
+                headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer ${userInfo.token}`,
+                },
+            };
+            const {data} = await axios.post(
+                "/api/message/", msgData,
+                config
+            );
+        } catch (error) {
+            toast({
+                title: "ERROR OCCURED WHILE SENDING MESSAGE!",
+                description: error.response.data.message,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+        }
+    }
     
     return ( 
         <Box width='100%' height={'100vh'} display={'flex'} alignItems={'center'}>
             <Box className="left" borderRight={'1px'} borderRightColor="white" width='25%' height='100vh' bgGradient="linear(to-l, #2F7336, #AA3A38)">
                 <Box height={'10%'} borderBottom={'1px'} borderBottomColor={'white'}>
-                    <Newchat renderUserChats={() => renderChats}/>
+                    <Newchat renderUserChats={renderChats}/>
                 </Box>
                 <Box color={'white'} height='80%'>
-                    <UserChats onlineUsers={onlineUsers} setChatsList={setChatsList} reload={reload} loadChat={loadChat} setMessages={setMessages} setChatsLoading={setChatsLoading}/>
+                    <UserChats onlineUsers={onlineUsers} chatsList={chatsList} setChatsList={setChatsList} reload={reload} loadChat={loadChat} setMessages={setMessages} setLastMsg={setLastMsg} setChatsLoading={setChatsLoading} chats={chats} setChats={setChats} updateLatestMessages={updateLatestMessages}/>
                 </Box>
                 <Box borderTop={'1px'} borderTopColor={'white'} height='10%' cursor="pointer" _hover={{ bg: "black" }} padding={4} style={{ color:'black', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <UserOps/>
@@ -166,15 +216,15 @@ function Messages() {
                                     </Box>
                                 ) : (
                                     messages.map((msg) => {
-                                        const currentChat = msg.chat;
+                                        const currentChat = msg.chat[0];
                                         if (currentChat === chat[0]) {
                                             return (
                                                 <Message
                                                     key={msg._id}
                                                     msgId={msg._id}
-                                                    user={msg.userEmail === userEmail ? '' : msg.userName}
+                                                    user={msg.userId === userId ? '' : msg.userName}
                                                     message={msg.message}
-                                                    classs={msg.userEmail === userEmail ? 'right' : 'left'}
+                                                    classs={msg.userId === userId ? 'right' : 'left'}
                                                     pic={msg.userPic}
                                                 />
                                             );
@@ -190,7 +240,7 @@ function Messages() {
                             <div id="chatInput">  
                             <input type="text" id="sendInput" placeholder='SEND MESSAGE..'/>
                             <Tooltip label='Send'>
-                                <Button onClick={()=>send(chat[0])} className='sendBtn'> <img src="https://cdn-icons-png.flaticon.com/128/9380/9380620.png"alt="send" /> </Button>
+                                <Button onClick={()=>send(chat)} className='sendBtn'> <img src="https://cdn-icons-png.flaticon.com/128/9380/9380620.png"alt="send" /> </Button>
                             </Tooltip>
                             </div>
                         </div>
