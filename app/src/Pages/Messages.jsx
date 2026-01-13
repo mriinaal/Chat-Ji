@@ -80,25 +80,28 @@ function Messages() {
     const [chatsList, setChatsList] = useState([]);
 
     useEffect(()=>{
-        // console.log(messages);
         const latestMsg = messages[messages.length - 1];
-        updateLatestMessages(latestMsg);
+        // console.log(latestMsg);
         setLastMsg(latestMsg);
-        if(latestMsg&&latestMsg!==lastMsg&&!chatsList.includes(latestMsg.chat[0])){
-            renderChats();
+        updateLatestMessages(latestMsg);
+        if(latestMsg&&latestMsg!==lastMsg&&(typeof latestMsg._id === 'number')){
+            if(!chatsList.includes(latestMsg.chat[0])){
+                renderChats();
+            }
+            if(latestMsg.chat[0]!==chat[0]&&latestMsg.userId!==userId){
+                toast({
+                    title: latestMsg.userName,
+                    description: latestMsg.message,
+                    duration: 2500,
+                    position: "top-left",
+                    render: () => (
+                        <CustomNotificationToast loadChat={loadChat} latestMsg={latestMsg}/>
+                    ),
+                });                
+            }   
         }
-        if(latestMsg&&latestMsg!==lastMsg&&latestMsg.chat[0]!==chat[0]&&latestMsg.userId!==userId){
-            toast({
-                title: latestMsg.userName,
-                description: latestMsg.message,
-                duration: 2500,
-                position: "top-left",
-                render: () => (
-                    <CustomNotificationToast loadChat={loadChat} latestMsg={latestMsg}/>
-                ),
-            });                
-        }   
-    },[chat, chatsList, messages, lastMsg])
+
+    },[chat, chatsList, messages])
 
     const updateLatestMessages = (newMessage) => {
         if(newMessage !== undefined && newMessage !== null){   
@@ -107,9 +110,9 @@ function Messages() {
                     return { ...chat, latestMessage: newMessage, updatedAt: Date.now() };
                 }
                 return chat;
-            });
+            });            
             const sortedChats = updatedChats.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-            setChats(sortedChats);
+            setChats(sortedChats);                   
         }
     };
     
@@ -149,6 +152,13 @@ function Messages() {
             });
         }
     }
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            send(chat);
+        }
+    };
     
     return ( 
         <Box width='100%' height={'100vh'} display={'flex'} alignItems={'center'}>
@@ -157,7 +167,7 @@ function Messages() {
                     <Newchat renderUserChats={renderChats}/>
                 </Box>
                 <Box color={'white'} height='80%'>
-                    <UserChats onlineUsers={onlineUsers} chatsList={chatsList} setChatsList={setChatsList} reload={reload} loadChat={loadChat} setMessages={setMessages} setLastMsg={setLastMsg} setChatsLoading={setChatsLoading} chats={chats} setChats={setChats} updateLatestMessages={updateLatestMessages}/>
+                    <UserChats onlineUsers={onlineUsers} chatsList={chatsList} setChatsList={setChatsList} reload={reload} loadChat={loadChat} setMessages={setMessages} setChatsLoading={setChatsLoading} chats={chats} setChats={setChats} updateLatestMessages={updateLatestMessages}/>
                 </Box>
                 <Box borderTop={'1px'} borderTopColor={'white'} height='10%' cursor="pointer" _hover={{ bg: "black" }} padding={4} style={{ color:'black', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <UserOps/>
@@ -238,7 +248,7 @@ function Messages() {
                     <Box height='10%' padding={4} style={{ color:'black', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div className="inputBox">
                             <div id="chatInput">  
-                            <input type="text" id="sendInput" placeholder='SEND MESSAGE..'/>
+                            <input onKeyDown={handleKeyDown} type="text" id="sendInput" placeholder='SEND MESSAGE..'/>
                             <Tooltip label='Send'>
                                 <Button onClick={()=>send(chat)} className='sendBtn'> <img src="https://cdn-icons-png.flaticon.com/128/9380/9380620.png"alt="send" /> </Button>
                             </Tooltip>

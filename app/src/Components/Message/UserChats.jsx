@@ -4,7 +4,7 @@ import { useToast, Skeleton, SkeletonCircle, Box } from "@chakra-ui/react";
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { useLocation } from 'react-router-dom';
 
-function UserChats({ onlineUsers, chatsList, setChatsList, reload, loadChat, setMessages, setLastMsg, setChatsLoading, chats, setChats, updateLatestMessages }) {
+function UserChats({ onlineUsers, chatsList, setChatsList, reload, loadChat, setMessages, setChatsLoading, chats, setChats }) {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const userId = JSON.parse(localStorage.getItem("userId"));
     const toast = useToast();
@@ -93,7 +93,6 @@ function UserChats({ onlineUsers, chatsList, setChatsList, reload, loadChat, set
                     _id : msg._id
                 }
                 setMessages(prevMessage => [...prevMessage, msgObj]);
-                setLastMsg(msgObj);
             });
         } catch (error) {
             toast({
