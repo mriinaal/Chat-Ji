@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useToast, Button, Box, Tooltip, Skeleton, Text } from "@chakra-ui/react";
+import { useToast, Button, Box, Tooltip, Skeleton } from "@chakra-ui/react";
 import Newchat from "../Components/Message/Newchat";
 import axios from "axios";
 import UserChats from "../Components/Message/UserChats";
@@ -16,14 +16,12 @@ import CallModal from "../Components/Call/CallModal";
 const PROD = "production";
 const ENDPOINT = process.env.REACT_APP_ENV === PROD?"https://chatji.onrender.com/":"http://localhost:5000/";
 let socket;
-let chatId;
 
 function Messages() {
     const history = useHistory();
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const userId = JSON.parse(localStorage.getItem("userId"));
     const userName = JSON.parse(localStorage.getItem("userName"));
-    const userEmail = JSON.parse(localStorage.getItem("userEmail"));
     const userPic = JSON.parse(localStorage.getItem("userPic"));
     useEffect(() => {
         document.title = 'Messages | Chat-Ji';
@@ -104,15 +102,13 @@ function Messages() {
     }, [chat]);
 
     useEffect(() => {
-        if(typeData&&typeData.chat[0]===chat[0]){
-            setIsTyping(true);
-            // Stop typing indicator after a timeout
-            setTimeout(() => {
-                setIsTyping(false);
-                setTypeData(null);
-            }, 3000);
-        }
-    }, [typeData]);
+        setIsTyping(true);
+        // Stop typing indicator after a timeout
+        setTimeout(() => {
+            setIsTyping(false);
+            setTypeData(null);
+        }, 3000);
+    }, [chat, typeData]);
 
     const [lastMsg, setLastMsg]=useState(null);
     const [chatsList, setChatsList] = useState([]);
@@ -174,7 +170,7 @@ function Messages() {
                 Authorization: `Bearer ${userInfo.token}`,
                 },
             };
-            const {data} = await axios.post(
+            await axios.post(
                 "/api/message/", msgData,
                 config
             );
@@ -220,7 +216,7 @@ function Messages() {
                     <Newchat renderUserChats={renderChats}/>
                 </Box>
                 <Box color={'white'} height='80%'>
-                    <UserChats onlineUsers={onlineUsers} chatsList={chatsList} setChatsList={setChatsList} reload={reload} loadChat={loadChat} setMessages={setMessages} setChatsLoading={setChatsLoading} chats={chats} setChats={setChats} updateLatestMessages={updateLatestMessages}/>
+                    <UserChats onlineUsers={onlineUsers} chatsList={chatsList} setChatsList={setChatsList} reload={reload} loadChat={loadChat} setMessages={setMessages} setChatsLoading={setChatsLoading} chats={chats} setChats={setChats} updateLatestMessages={updateLatestMessages} isTyping={isTyping} typeData={typeData} currentChat={chat}/>
                 </Box>
                 <Box borderTop={'1px'} borderTopColor={'white'} height='10%' cursor="pointer" _hover={{ bg: "black" }} padding={4} style={{ color:'black', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <UserOps/>
@@ -304,7 +300,7 @@ function Messages() {
                             }
                         </ReactScrollToBottom>
                     </Box>
-                    {isTyping && typeData && typeData.chat[0]===chat[0]?<div className="typing-indicator">{typeData.userName} is typing...</div>:''}
+                    {isTyping && typeData && typeData.chat[0]===chat[0]?<div className="typing-indicator">{chat[4]?typeData.userName+' is':''} typing...</div>:''}
                     <Box height='10%' padding={4} style={{ color:'black', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div className="inputBox">
                             <div id="chatInput">  

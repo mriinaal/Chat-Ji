@@ -4,7 +4,7 @@ import { useToast, Skeleton, SkeletonCircle, Box } from "@chakra-ui/react";
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { useLocation } from 'react-router-dom';
 
-function UserChats({ onlineUsers, chatsList, setChatsList, reload, loadChat, setMessages, setChatsLoading, chats, setChats }) {
+function UserChats({ onlineUsers, chatsList, setChatsList, reload, loadChat, setMessages, setChatsLoading, chats, setChats, isTyping, typeData, currentChat }) {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const userId = JSON.parse(localStorage.getItem("userId"));
     const toast = useToast();
@@ -171,15 +171,19 @@ function UserChats({ onlineUsers, chatsList, setChatsList, reload, loadChat, set
                                 <h3 style={{ color: 'white', margin: '0' }}>
                                     {chatName}
                                 </h3>
+
+                                {
+                                    isTyping && typeData && typeData.chat[0] === chat._id && typeData.chat[0] !== currentChat[0] ? <h3 style={{ color: 'cyan', margin: '0' }}>{isGroupChat?typeData.userName+' is':''} typing...</h3>
+                                :
+                                    (latestMessage!==null && latestMessage!==undefined) ?
+                                    <h3 style={{ color: 'white', margin: '0' }}>
+                                        {latestMessage.userId === userId ? "You: " : isGroupChat?(latestMessage.userName+": "):""}
+                                        {latestMessage.message}
+                                    </h3>
+                                    :""
+                                }
                                 
-                                    {
-                                        (latestMessage!==null && latestMessage!==undefined) ?
-                                        <h3 style={{ color: 'white', margin: '0' }}>
-                                            {latestMessage.userId === userId ? "You: " : isGroupChat?(latestMessage.userName+": "):""}
-                                            {latestMessage.message}
-                                        </h3>
-                                        :""
-                                    }
+                                    
                                     
                             </Box>
                         </Box>
