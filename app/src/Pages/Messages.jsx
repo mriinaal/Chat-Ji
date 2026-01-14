@@ -6,9 +6,12 @@ import UserChats from "../Components/Message/UserChats";
 import UserOps from "../Components/Message/UserOps";
 import Message from "../Components/Message/Message";
 import socketIO from 'socket.io-client';
+import { useHistory } from "react-router-dom";
 import ReactScrollToBottom from "react-scroll-to-bottom";
 import CustomNotificationToast from "../Components/CustomNotificationToast";
+import Call from '../Components/Call/Call';
 import './Messages.css';
+import CallModal from "../Components/Call/CallModal";
 
 const PROD = "production";
 const ENDPOINT = process.env.REACT_APP_ENV === PROD?"https://chatji.onrender.com/":"http://localhost:5000/";
@@ -16,6 +19,7 @@ let socket;
 let chatId;
 
 function Messages() {
+    const history = useHistory();
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const userId = JSON.parse(localStorage.getItem("userId"));
     const userName = JSON.parse(localStorage.getItem("userName"));
@@ -37,6 +41,8 @@ function Messages() {
     const loadChat = (newChat) => {
         setChat(newChat);
     };
+    const [isTyping, setIsTyping] = useState(true);
+    const [typeData, setTypeData] = useState(null);
 
     useEffect(() => {
         if(!userInfo)return;
@@ -60,6 +66,27 @@ function Messages() {
             setMessages(prevMessages => [...prevMessages, data]); // Using functional update
         };
         socket.on("sendMessage", handleReceiveMessage);
+
+        //Receive call
+        const handleCall = (data) => {
+            // console.log(data);
+            toast({
+                title: 'latestMsg.userName',
+                description: 'latestMsg.message',
+                duration: 10000,
+                position: "bottom",
+                render: () => (
+                    <CallModal data={data}/>
+                ),
+            });    
+        };
+        socket.on("sendCall", handleCall);
+
+        //typing event
+        const handleTyping = (data) => {
+            setTypeData(data)
+        }
+        socket.on("typingSocketEvent", handleTyping);
     }, []);
 
     const [chats, setChats] = useState([]);
@@ -75,6 +102,17 @@ function Messages() {
             return () => clearTimeout(timer);
         }
     }, [chat]);
+
+    useEffect(() => {
+        if(typeData&&typeData.chat[0]===chat[0]){
+            setIsTyping(true);
+            // Stop typing indicator after a timeout
+            setTimeout(() => {
+                setIsTyping(false);
+                setTypeData(null);
+            }, 3000);
+        }
+    }, [typeData]);
 
     const [lastMsg, setLastMsg]=useState(null);
     const [chatsList, setChatsList] = useState([]);
@@ -100,7 +138,6 @@ function Messages() {
                 });                
             }   
         }
-
     },[chat, chatsList, messages])
 
     const updateLatestMessages = (newMessage) => {
@@ -158,7 +195,23 @@ function Messages() {
             event.preventDefault();
             send(chat);
         }
+        else {
+            socket.emit('typingSocketEvent', ({chat, userName, userId, userPic}))
+        }
     };
+
+    const logout =() => {
+        socket.disconnect();
+        localStorage.clear(); 
+        history.push('/');
+        toast({
+        title: "Logout Successful",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+        });
+    }
     
     return ( 
         <Box width='100%' height={'100vh'} display={'flex'} alignItems={'center'}>
@@ -177,19 +230,25 @@ function Messages() {
                 {
                 chat[0]!==""?
                     <>
-                    <Box key={chat[0]} color={"white"} height={'10%'} style={{ color: 'white', display: 'flex', alignItems: 'center', justifyContent:'center' }}>
-                        <img 
-                        src={chat[2]} 
-                        alt={`pfp`} 
-                        style={{ width: '45px', height: '45px', borderRadius: '50%', marginRight: '10px', display: 'inline' }} 
-                        />
-                        <Box _>
-                            <h3 style={{ display:'inline', color:'white', margin: '0'}}>{chat[1]}</h3>
-                            { chat[4]? <></>:
-                                <div style={{ display:'inline', color:'white', marginLeft: '4px'}}>
-                            </div>
-                            }
+                    <Box key={chat[0]} color={"white"} height={'10%'} style={{ color: 'white', display: 'flex', alignItems: 'center', justifyContent:'space-between', paddingLeft:'1.4rem', paddingRight:'1.4rem' }}>
+                        <Call chat={chat} socket={socket}/>
+                        <Box style={{ color: 'white', display: 'flex', alignItems: 'center', justifyContent:'center' }}>
+                            <img 
+                            src={chat[2]} 
+                            alt={`pfp`} 
+                            style={{ width: '45px', height: '45px', borderRadius: '50%', marginRight: '10px', display: 'inline' }} 
+                            />
+                            <Box _>
+                                <h3 style={{ display:'inline', color:'white', margin: '0'}}>{chat[1]}</h3>
+                                { chat[4]? <></>:
+                                    <div style={{ display:'inline', color:'white', marginLeft: '4px'}}>
+                                </div>
+                                }
+                            </Box>
                         </Box>
+                        <Tooltip label='LOGOUT'>
+                            <img onClick={logout} style={{ width: '1.8rem', filter: 'invert(100)'}} src="https://cdn-icons-png.flaticon.com/512/4739/4739887.png" alt="LOGOUT"/>
+                        </Tooltip>
                     </Box>
                     <Box color={'white'} height='80%'>
                         <ReactScrollToBottom className='chatBox'>
@@ -245,6 +304,7 @@ function Messages() {
                             }
                         </ReactScrollToBottom>
                     </Box>
+                    {isTyping && typeData && typeData.chat[0]===chat[0]?<div className="typing-indicator">{typeData.userName} is typing...</div>:''}
                     <Box height='10%' padding={4} style={{ color:'black', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div className="inputBox">
                             <div id="chatInput">  

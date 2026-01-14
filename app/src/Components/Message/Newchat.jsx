@@ -11,7 +11,6 @@ import {
   ModalCloseButton, Checkbox,
 } from '@chakra-ui/react'
 
-
 function Newchat({renderUserChats}) {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const userId = JSON.parse(localStorage.getItem("userId"));
@@ -140,7 +139,6 @@ function Newchat({renderUserChats}) {
                         style={{ width: '24px', height: '24px', marginLeft: '8px' }} 
                     />
                 </Button>
-                
             </Box>
             <Modal onClose={onClose} isOpen={isOpen} size='xl' isCentered>
             <ModalOverlay />

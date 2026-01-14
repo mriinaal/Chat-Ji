@@ -73,7 +73,6 @@ function SignIn() {
   return (
     <div className='signUp-container'>
       <form action="#">
-
         <label className='authLabel' htmlFor="signInemail" >E-MAIL:</label>
         <input 
         required
@@ -126,7 +125,6 @@ function SignIn() {
             GET GUEST USER CREDENTIALS
           </button>
         </div>
-          
       </form>
     </div>
   )

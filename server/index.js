@@ -70,7 +70,6 @@ io.on('connection', (socket)=>{
     socket.on('message', ({ chat, _id, message, userName, userId, userPic }) => {
         // console.log(chat, message);
         
-        // Check if chat[3] is an array
         if (chat[4]) { //groupChatVariable
             // Iterate through all users in the array
             chat[3].forEach(user => {
@@ -91,6 +90,34 @@ io.on('connection', (socket)=>{
         
     });
 
+    socket.on('sendCall', ({chat, userId, userName, userPic}) =>{
+        // console.log(chat, userId, userName, userPic);
+        if (chat[4]) { //groupChatVariable
+            // Iterate through all users in the array
+            chat[3].forEach(user => {
+                if(user._id !== userId){
+                    io.to(user._id).emit('sendCall', {chat, userId, userName, userPic});
+                }
+            });
+        } else {
+            io.to(chat[3]).emit('sendCall', {chat, userId, userName, userPic});
+        }
+    });
+
+    socket.on('typingSocketEvent', ({chat, userId, userName, userPic}) =>{
+        // console.log(chat, userId, userName, userPic);
+        if (chat[4]) { //groupChatVariable
+            // Iterate through all users in the array
+            chat[3].forEach(user => {
+                if(user._id !== userId){
+                    io.to(user._id).emit('typingSocketEvent', {chat, userId, userName, userPic});
+                }
+            });
+        } else {
+            io.to(chat[3]).emit('typingSocketEvent', {chat, userId, userName, userPic});
+        }
+    });
+
     socket.on('disconnect', () => {
         // Remove user from the array on disconnect
         const userIndex = users.findIndex(user => user.id === socket.id);
@@ -103,25 +130,6 @@ io.on('connection', (socket)=>{
         // console.log(users);
         // console.log(`User Disconnected: ${socket.id}`);
     });
-
-    // socket.on('joined', (data)=>{
-    //     // console.log(socket.id);
-    //     users[socket.id] = data.userName;
-    //     // console.log(users[socket.id]);
-    //     // console.log(`${data.userName} Joined`);
-    //     socket.emit(`welcome`, {user:`Admin`, message:`Welcome to Chat Zone`});
-    //     socket.broadcast.emit(`sendMessage`, {user:`Admin`, message:`${users[socket.id]} has joined the chat`});
-
-    //     // socket.on('message', ({message, socketId, userPic}) => {
-    //     //     // console.log(id);
-    //     //     // console.log(userPic);
-    //         io.emit('sendMessage', {user:`${users[socketId]}`, message, socketId, userPic});
-    //     // });
-
-    //     socket.on('disconnect', ()=>{
-    //         socket.broadcast.emit('sendMessage', {user:`Admin`, message:`${users[socket.id]} Disconnected`});
-    //     });
-    // });
 });
 //!------------------------------------Socket------------------------------------!\\ 
 
