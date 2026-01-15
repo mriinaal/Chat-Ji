@@ -132,7 +132,7 @@ function Newchat({renderUserChats}) {
                     alignItems="center"
                     _hover={{ bg: 'black', color: 'white' }} 
                 >
-                    NEW CHAT
+                    <div className="newChatText" style={{color:'white'}}>NEW CHAT</div>
                     <img className="newChatImage"
                         src="https://cdn-icons-png.flaticon.com/128/11741/11741042.png" 
                         alt="icon" 

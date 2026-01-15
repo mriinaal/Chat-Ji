@@ -215,10 +215,10 @@ function Messages() {
                 <Box height={'10%'} borderBottom={'1px'} borderBottomColor={'white'}>
                     <Newchat renderUserChats={renderChats}/>
                 </Box>
-                <Box color={'white'} height='80%'>
+                <Box className="userChatsMainBox" color={'white'} height='80%'>
                     <UserChats onlineUsers={onlineUsers} chatsList={chatsList} setChatsList={setChatsList} reload={reload} loadChat={loadChat} setMessages={setMessages} setChatsLoading={setChatsLoading} chats={chats} setChats={setChats} updateLatestMessages={updateLatestMessages} isTyping={isTyping} typeData={typeData} currentChat={chat}/>
                 </Box>
-                <Box borderTop={'1px'} borderTopColor={'white'} height='10%' cursor="pointer" _hover={{ bg: "black" }} padding={4} style={{ color:'black', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box className="userOpsMainBox" borderTop={'1px'} borderTopColor={'white'} height='10%' cursor="pointer" _hover={{ bg: "black" }} padding={4} style={{ color:'black', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <UserOps/>
                 </Box>
             </Box>
@@ -301,7 +301,7 @@ function Messages() {
                         </ReactScrollToBottom>
                     </Box>
                     {isTyping && typeData && typeData.chat[0]===chat[0]?<div className="typing-indicator">{chat[4]?typeData.userName+' is':''} typing...</div>:''}
-                    <Box height='10%' padding={4} style={{ color:'black', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box className="sendMessageInput" height='10%' padding={4} style={{ color:'black', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div className="inputBox">
                             <div id="chatInput">  
                             <input onKeyDown={handleKeyDown} type="text" id="sendInput" placeholder='SEND MESSAGE..'/>

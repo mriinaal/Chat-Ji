@@ -10,7 +10,7 @@ function UserOps() {
 
     return (
         <>
-            <Box>
+            <Box className="userOpsText">
                 <h3 style={{ color:'white', margin: '0'}}>{userName}</h3>
                 <h3 style={{ color:'white', margin: '0'}}>{`${userEmail}`}</h3>
             </Box>

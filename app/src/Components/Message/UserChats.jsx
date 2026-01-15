@@ -30,7 +30,6 @@ function UserChats({ onlineUsers, chatsList, setChatsList, reload, loadChat, set
                     config
                 );
                 // console.log(data);
-                setChats(data);
                 data.forEach(chat => {
                     if(!chatsList.includes(chat._id)){
                         setChatsList(chatsList =>[...chatsList, chat._id]);
@@ -40,7 +39,7 @@ function UserChats({ onlineUsers, chatsList, setChatsList, reload, loadChat, set
                     }
                 });
                 setFirstFetchChat(false);
-                setLoading(false);
+                setChats(data);
             } catch (error) {
                 setLoading(false);
                 toast({
@@ -51,8 +50,6 @@ function UserChats({ onlineUsers, chatsList, setChatsList, reload, loadChat, set
                     isClosable: true,
                     position: "bottom",
                 });
-            }finally{
-                setLoading(false);
             }
         };
         fetchChats();
@@ -104,12 +101,13 @@ function UserChats({ onlineUsers, chatsList, setChatsList, reload, loadChat, set
                 position: "bottom",
             });
         }finally{
+            setLoading(false);
             setChatsLoading(false);
         }
     };
 
     return (
-        <Box height={'100%'} width="100%" color='white' overflow='auto'>
+        <Box className="userChatsMainBox" height={'100%'} width="100%" color='white' overflow='auto'>
             {loading ? (
                 <Box display="flex" flexDirection="column" p={4}>
                     {[...Array(10)].map((_, index) => (
@@ -120,7 +118,7 @@ function UserChats({ onlineUsers, chatsList, setChatsList, reload, loadChat, set
                             mb={4}
                         >
                             <SkeletonCircle size="45px" />
-                            <Box ml={3}>
+                            <Box className="userChatsSkeletonLine" ml={3}>
                                 <Skeleton mb={2} height="10px" width="100px" />
                                 <Skeleton height="10px" width="150px" mb={2} />
                             </Box>
@@ -152,7 +150,7 @@ function UserChats({ onlineUsers, chatsList, setChatsList, reload, loadChat, set
                             padding={4} 
                             style={{ color: 'white', display: 'flex', alignItems: 'center' }}
                         >
-                            <img 
+                            <img className="userChatImg"
                                 src={chatPic} 
                                 alt={`pfp`} 
                                 style={{ width: '45px', height: '45px', borderRadius: '50%', marginRight: '0px', display: 'inline' }} 
@@ -168,7 +166,7 @@ function UserChats({ onlineUsers, chatsList, setChatsList, reload, loadChat, set
                                 )
                             }
                             <Box className="chatUsersName">
-                                <h3 style={{ color: 'white', margin: '0' }}>
+                                <h3 className="chatNameText" style={{ color: 'white', margin: '0' }}>
                                     {chatName}
                                 </h3>
 
@@ -176,7 +174,7 @@ function UserChats({ onlineUsers, chatsList, setChatsList, reload, loadChat, set
                                     isTyping && typeData && typeData.chat[0] === chat._id && typeData.chat[0] !== currentChat[0] ? <h3 style={{ color: 'cyan', margin: '0' }}>{isGroupChat?typeData.userName+' is':''} typing...</h3>
                                 :
                                     (latestMessage!==null && latestMessage!==undefined) ?
-                                    <h3 style={{ color: 'white', margin: '0' }}>
+                                    <h3 className="latestMsgText" style={{ color: 'white', margin: '0' }}>
                                         {latestMessage.userId === userId ? "You: " : isGroupChat?(latestMessage.userName+": "):""}
                                         {latestMessage.message}
                                     </h3>
