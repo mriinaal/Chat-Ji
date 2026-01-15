@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "./chats.css";
+import "./chatzone.css";
 
 import socketIO from "socket.io-client";
 
@@ -9,16 +9,19 @@ import { useHistory } from "react-router-dom";
 import Message from '../Components/Message/Message';
 import Call from '../Components/Call/Call';
 
-import { useToast } from "@chakra-ui/react";
+import { useToast, Tooltip } from "@chakra-ui/react";
 
 import ReactScrollToBottom from "react-scroll-to-bottom";
 
-const ENDPOINT = "https://chatji.onrender.com/";
+const PROD = "production";
+const ENDPOINT = process.env.REACT_APP_ENV === PROD?"https://chatji.onrender.com/":"http://localhost:5000/";
 
 let socket;
 
-
-export default function Chats() {
+export default function Chatzone() {
+  useEffect(() => {
+    document.title = 'CHAT ZONE | Chat-Ji';
+  }, []);
 
   useEffect(() => {
     let link = document.querySelector("link[rel~='icon']");
@@ -34,9 +37,6 @@ export default function Chats() {
   let userPic;
   const toast = useToast();
 
-  useEffect(() => {
-    document.title = 'CHAT ZONE';
-  }, []);
 
   const history = useHistory();
 
@@ -52,9 +52,9 @@ export default function Chats() {
 
   const [id, setid] = useState("");
   const send = () => {
-    const message =document.getElementById('chatInput').value;
+    const message =document.getElementById('sendInput').value;
     socket.emit('message', ({message, id, userPic}));
-    document.getElementById('chatInput').value = "";
+    document.getElementById('sendInput').value = "";
   }
 
 
@@ -67,7 +67,6 @@ export default function Chats() {
 
     });
     socket.emit('joined', {userName: `${userName}`});
-    
 
     socket.on(`welcome`, (data)=>{
       setmessages(messages=>[...messages, data]);
@@ -76,15 +75,6 @@ export default function Chats() {
       // console.log(data.user, data.message);
     });
 
-    socket.on(`userJoined`, (data)=>{
-      setmessages(messages=>[...messages, data]);
-      // console.log(data.user, data.message);
-    });
-  
-    socket.on('user-disconnect', (data)=>{
-      setmessages(messages=>[...messages, data]);
-      // console.log(data.user, data.message);
-    });
   }, [userName]);
 
   const [messages, setmessages] = useState([]);
@@ -101,6 +91,7 @@ export default function Chats() {
   }, [messages]);
 
   const logout =() => {
+    socket.disconnect();
     localStorage.clear(); 
     history.push('/');
     toast({
@@ -119,7 +110,9 @@ export default function Chats() {
         <div className='header'>
           <Call/>
           <p className='neonText'>{`{ CHAT ZONE }`}</p>
-          <img onClick={logout} className="logout" src="https://cdn-icons-png.flaticon.com/512/25/25376.png" alt="LOGOUT"/>
+          <Tooltip label='Logout'>
+            <img onClick={logout} className="logout" src="https://cdn-icons-png.flaticon.com/512/25/25376.png" alt="LOGOUT"/>
+          </Tooltip>
         </div>
         <div className='chatContainer'>
           <ReactScrollToBottom className='chatBox'>
@@ -127,8 +120,12 @@ export default function Chats() {
           </ReactScrollToBottom>
         </div>
         <div className="inputBox">
-          <input type="text" id='chatInput' placeholder='Send Message..'/>
-          <button onClick={send} className='sendBtn'> <img src="http://cdn.onlinewebfonts.com/svg/img_372616.png"alt="send" /> </button>
+          <div id="chatInput">  
+            <input type="text" id="sendInput" placeholder='Send Message..'/>
+            <Tooltip label='Send'>
+              <button onClick={send} className='sendBtn'> <img src="https://cdn-icons-png.flaticon.com/128/9380/9380620.png"alt="send" /> </button>
+            </Tooltip>
+          </div>
         </div>
       </div>
     </>

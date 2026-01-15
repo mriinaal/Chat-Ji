@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import showPwdImg from './show-password.svg';
 import hidePwdImg from './hide-password.svg';
 import axios from "axios";
-import { useToast } from "@chakra-ui/react";
+import { useToast, Spinner } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import '../../Pages/phone.css';
 
@@ -12,11 +12,13 @@ function SignIn() {
   const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
   const [isRevealPwd, setIsRevealPwd] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const submitHandeler = async () => {
+    setLoading(true);
     if (!email || !password) {
+      setLoading(false);
       toast({
-        title: "Please Fill all the Feilds",
+        title: "PLEASE FILL ALL THE FIELDS!",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -41,19 +43,23 @@ function SignIn() {
         
       // console.log(JSON.stringify(data));
       toast({
-        title: "Login Successful",
+        title: "LOGIN SUCCESSFUL!",
         status: "success",
         duration: 5000,
         isClosable: true,
         position: "bottom",
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
+      localStorage.setItem("userId", JSON.stringify(data._id));
       localStorage.setItem("userName", JSON.stringify(data.name));
       localStorage.setItem("userPic", JSON.stringify(data.pic));
-      history.push("/chats");
+      localStorage.setItem("userEmail", JSON.stringify(data.email));
+      localStorage.setItem("token", JSON.stringify(data.token));
+      setLoading(false);
+      history.push("/messages");
     } catch (error) {
       toast({
-        title: "Error Occured!",
+        title: "ERROR OCCURED!",
         description: error.response.data.message,
         status: "error",
         duration: 5000,
@@ -67,27 +73,26 @@ function SignIn() {
   return (
     <div className='signUp-container'>
       <form action="#">
-
         <label className='authLabel' htmlFor="signInemail" >E-MAIL:</label>
         <input 
         required
         id='signInemail' 
         className='authInput' 
         type='email'
-        placeholder='Enter Your E-mail'
+        placeholder='ENTER YOUR E-MAIL'
         name='email'
         onChange={(e)=> setemail(e.target.value)}
         value={email} 
         />
 
         <label className='authLabel' htmlFor="signInpassword" >PASSWORD:</label>
-        <div className="password-container">
+        <div className="password-container authInput">
         <input
         required
-        className='authInput'
+        
         id='signInpassword'
         name="password"
-        placeholder="Enter Your Password"
+        placeholder="ENTER YOUR PASSWORD"
         type={isRevealPwd ? "text" : "password"}
         value={password}
         onChange={e => setPassword(e.target.value)}
@@ -101,10 +106,13 @@ function SignIn() {
         onClick={() => setIsRevealPwd(prevState => !prevState)}
         />
       </div>
-
-        <div>
-          <button className='authButton' type="button" onClick={submitHandeler}>SIGN-IN</button>
-        </div>
+          {loading ? (
+            <div className='authButton'>
+                <Spinner size="sm" color="white" />
+            </div>
+            ) : (
+                <button className='authButton' type="button" onClick={submitHandeler}>SIGN-IN</button>
+            )}
         <div>
           <button 
           className='authButton'
@@ -117,7 +125,6 @@ function SignIn() {
             GET GUEST USER CREDENTIALS
           </button>
         </div>
-          
       </form>
     </div>
   )
