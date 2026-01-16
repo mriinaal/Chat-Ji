@@ -49,10 +49,11 @@ function JoinModal() {
           // onClick={() => handleSizeClick(size)}
           // key={size}
           size='sm'
-          colorPalette="teal" variant="solid"
+          variant='solid'
           my={1}
+          colorScheme='messenger'
           rightIcon={<LinkIcon boxSize={3}/>}
-        >JOIN</Button>
+        >{`Join`}</Button>
     </form>
       {/* <Modal 
         onClose={onClose}

@@ -1,10 +1,9 @@
 import React from 'react'
-import {Box} from "@chakra-ui/react";
 import "./message.css"
-function Message({msgId, user, message, classs, pic}) {
+function Message({user, message, classs, pic}) {
     if(user){
         return (
-            <Box key={msgId} className={`receiver`}>
+            <div className={`receiver`}>
                 <p>{`${user}`}</p>
                 <div className={`messageContainer ${classs}`}>
                     <div className='identity'>
@@ -18,19 +17,19 @@ function Message({msgId, user, message, classs, pic}) {
                         {`${message}`} 
                     </div>
                 </div>
-            </Box>
+            </div>
         )
     }
     else{
         return (
-            <Box key={msgId} className={`messageContainerRight ${classs}`}>
+            <div className={`messageContainerRight ${classs}`}>
                 <div className='identity'>
                     <img src={pic} alt="pfp"/>
                 </div>
                 <div>
                     {`${message}`}
                 </div>
-            </Box>
+            </div>
         )
     }
 }

@@ -7,7 +7,7 @@
     font-family: 'JetBrains Mono', monospace;
     color: black;
     font-size: 0.91rem;
-    scrollbar-width:none;
+    scrollbar-width:thin;
     scrollbar-color: #02626b #250023;
     scroll-behavior: smooth;
 }
@@ -152,7 +152,6 @@
 
 .password-container {
     display: flex;
-    justify-content: space-between;
 }
 
 #showHide {
@@ -182,7 +181,6 @@ input[type=file]::file-selector-button {
     width: 100%;
     border: none;
     font-size: 1rem;
-    text-align: center;
     padding: 12px 100px;
     margin-top: 15px;
 }

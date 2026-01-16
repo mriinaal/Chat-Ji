@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { useHistory } from "react-router";
 import upload from'./upload.png';
 import showPwdImg from './show-password.svg';
 import hidePwdImg from './hide-password.svg';
+import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
-import { useToast, Spinner } from "@chakra-ui/react";
+import { useHistory } from "react-router";
 
 function SignUp() {
   const toast = useToast();
@@ -15,14 +15,11 @@ function SignUp() {
   const [password, setpassword] = useState('');
   const [confirmpassword, setConfirmPassword] = useState('');
   const [pic, setPic] = useState();
-  const [loading, setLoading] = useState(false);
   
   const submitHandeler = async () => {
-    setLoading(true);
     if (!name || !email || !password || !confirmpassword) {
-      setLoading(false);
       toast({
-        title: "PLEASE FILL ALL THE FIELDS",
+        title: "Please Fill all the Feilds",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -31,9 +28,8 @@ function SignUp() {
       return;
     }
     if (password !== confirmpassword) {
-      setLoading(false);
       toast({
-        title: "PASSWORDS DO NOT MATCH",
+        title: "Passwords Do Not Match",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -61,23 +57,19 @@ function SignUp() {
 
       // console.log(data);
       toast({
-        title: "REGEISTRATION SUCCESSFUL",
+        title: "Registration Successful",
         status: "success",
         duration: 5000,
         isClosable: true,
         position: "bottom",
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
-      localStorage.setItem("userId", JSON.stringify(data._id));
       localStorage.setItem("userName", JSON.stringify(data.name));
-      localStorage.setItem("userEmail", JSON.stringify(data.email));
       localStorage.setItem("userPic", JSON.stringify(data.pic));
-      localStorage.setItem("token", JSON.stringify(data.token));
-      setLoading(false);
-      history.push("/messages");
+      history.push("/chats");
     } catch (error) {
       toast({
-        title: "ERROR OCCURED!",
+        title: "Error Occured!",
         description: error.response.data.message,
         status: "error",
         duration: 5000,
@@ -88,11 +80,9 @@ function SignUp() {
   };
 
   const postDetails = (pics) => {
-    setLoading(true);
     if (pics === undefined) {
-      setLoading(false);
       toast({
-        title: "PLEASE SELECT AN IMAGE!",
+        title: "Please Select an Image!",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -113,16 +103,14 @@ function SignUp() {
         .then((res) => res.json())
         .then((data) => {
           setPic(data.url.toString());
-          setLoading(false);
           // console.log(data.url.toString());
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
-      setLoading(false);
       toast({
-        title: "PLEASE SELECT A VALID IMAGE!",
+        title: "Please Select an Image!",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -142,7 +130,7 @@ function SignUp() {
         id='name' 
         className='authInput' 
         type="text"
-        placeholder='ENTER YOUR NAME' 
+        placeholder='Enter Your Name' 
         name='name'
         onChange={(e)=> setname(e.target.value)}
         value={name}
@@ -154,19 +142,20 @@ function SignUp() {
         id='email' 
         className='authInput' 
         type='email'
-        placeholder='ENTER YOUR E-MAIL'
+        placeholder='Enter Your E-mail'
         name='email'
         onChange={(e)=> setemail(e.target.value)}
         value={email} 
         />
 
         <label className='authLabel' htmlFor="password" >CREATE PASSWORD:</label>
-        <div className="password-container authInput">
+        <div className="password-container">
         <input
         required
+        className='authInput'
         id='password'
         name="password"
-        placeholder="ENTER YOUR PASSWORD"
+        placeholder="Enter Your Password"
         type={isRevealPwd ? "text" : "password"}
         value={password}
         onChange={e => setpassword(e.target.value)}
@@ -182,12 +171,13 @@ function SignUp() {
         </div>
 
         <label className='authLabel' htmlFor="confirmPassword" >CONFIRM PASSWORD:</label>
-        <div className="password-container authInput">
+        <div className="password-container">
         <input
         required
+        className='authInput'
         id='confirmPassword'
         name="myConfirmPassword"
-        placeholder="CONFIRM YOUR PASSWORD"
+        placeholder="Confirm Password"
         type={isRevealPwd ? "text" : "password"}
         value={confirmpassword}
         onChange={e => setConfirmPassword(e.target.value)}
@@ -213,13 +203,9 @@ function SignUp() {
           accept='image/*'
           onChange={(e) => postDetails(e.target.files[0])}
         />
-          {loading ? (
-              <div className='authButton'>
-                <Spinner size="sm" color="white" />
-              </div>
-            ) : (
-              <button className='authButton' type="button" onClick={submitHandeler}>SIGN-UP</button>
-            )}
+        <div>
+          <button className='authButton' type="button" onClick={submitHandeler}>SIGN-UP</button>
+        </div>
       </form>
     </div>
   )

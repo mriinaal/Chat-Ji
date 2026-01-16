@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useHistory, useParams } from "react-router-dom";
 import {ZegoUIKitPrebuilt} from '@zegocloud/zego-uikit-prebuilt';
 
+
 function VideoCall() {
   const history = useHistory();
   useEffect(() => {

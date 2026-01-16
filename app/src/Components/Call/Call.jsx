@@ -1,32 +1,32 @@
 import React from 'react'
 import {
-    Tooltip,
-    Box
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverHeader,
+    PopoverBody,
+    PopoverArrow,
+    PopoverCloseButton,
 } from '@chakra-ui/react'
 import './call.css'
+import JoinModal from './JoinModal'
 
-function Call({ chat, socket }) {
-
-  const userId = JSON.parse(localStorage.getItem("userId"));
-  const userName = JSON.parse(localStorage.getItem("userName"));
-  const userPic = JSON.parse(localStorage.getItem("userPic"));
-
-  const answerCall = (data)=>{
-        const url = `/call/${chat[0]}`;
-        window.open(url, '_blank');
-    }
-  const socketCall = () => {
-    // console.log(data);
-    socket.emit('sendCall', {chat, userId, userName, userPic});
-    answerCall();
-  };
+function Call() {
 
   return (
-    <Box onClick={()=>socketCall()}>
-      <Tooltip label='CALL'>
-        <img alt='CALL' src='https://cdn-icons-png.flaticon.com/512/1160/1160041.png' style={{ width: '1.4rem', filter: 'invert(100)'}}/>
-      </Tooltip>
-    </Box>
+    <Popover>
+        <PopoverTrigger>
+        <img alt='CALL' src='https://cdn-icons-png.flaticon.com/512/1160/1160041.png' className='logout videoCall'/>
+        </PopoverTrigger>
+        <PopoverContent>
+            <PopoverArrow />
+            <PopoverCloseButton />
+            <PopoverHeader>GO LIVE!</PopoverHeader>
+            <PopoverBody>
+              <JoinModal/>
+            </PopoverBody>
+        </PopoverContent>
+    </Popover>
   )
 }
 
