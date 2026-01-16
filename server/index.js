@@ -1,44 +1,50 @@
-const express = require('express'); 
-const app = express();
-app.use(express.json()); //* to accept json data
+const express = require('express'); //* importing express;
+const app = express(); //* creating an instance of express app;
 
 const path = require('path')
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
-const PORT = process.env.PORT;
-
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') }) //* importing dotenv & using config() function;
+// const chats = require('./data/data'); //* api/dummyData;
 const connectDB = require("./config/db");
-connectDB();
-
 const colors = require('colors');
-
-const userRoutes = require('./routes/userRoutes');
-app.use('/api/user', userRoutes);
 const chatRoutes = require('./routes/chatRoutes');
-app.use('/api/chat', chatRoutes);
+const userRoutes = require('./routes/userRoutes');
 const messageRoutes = require('./routes/messageRoutes');
-app.use('/api/message', messageRoutes);
-
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
-app.use(notFound);
-app.use(errorHandler);
 
 const socketIO = require("socket.io");
 const server = require('http').Server(app);
 const io = socketIO(server);
 
-const cors = require('cors');
+const cors = require('cors'); //* installing cors middleware heps in communication between url;
+
+const PORT = process.env.PORT;
+
+connectDB();
+
+app.use(express.json()); //* to accept json data
+
 app.use(cors());
 
-const PROD = "production";
+app.use('/api/user', userRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/message', messageRoutes);
 
 //!----------------------------------Deployment----------------------------------!\\ 
+const PROD = "production";
 const __dirname1 = path.resolve();
+
 if(process.env.NODE_ENV == PROD){
     app.use(express.static(path.join(__dirname1, "../app/build-onrender")));
-    app.get('*', (req, res) =>res.sendFile(path.resolve(__dirname1,"app", "build-onrender", "index.html")));
+    app.get('*', (req, res) =>{
+        res.sendFile(path.resolve(__dirname1,"../app", "build-onrender", "index.html"));
+    });
 }
 else app.get(`/`, (req, res)=>res.status(200).send(`Blame it on me`));
+
 //!----------------------------------Deployment----------------------------------!\\ 
+
+app.use(notFound);
+app.use(errorHandler);
 
 //!------------------------------------Socket------------------------------------!\\ 
 var users=[];
@@ -135,8 +141,8 @@ io.on('connection', (socket)=>{
 
 if(process.env.NODE_ENV == PROD){
     server.listen(PORT, ()=>{
-        console.log(`${PORT}`);
-        console.log(`Server running on: https://chatji.onrender.com`.yellow);
+        // console.log(`${PORT}`);
+        console.log(`Server running on: https://chatji.onrender.com/`.yellow);
     });
 }
 else server.listen(PORT, ()=> console.log(`Server running on: http://localhost:${PORT}`.yellow));
