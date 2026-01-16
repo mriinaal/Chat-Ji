@@ -38,18 +38,19 @@
     clear: both;    
 }
 .receiver > p{
+    color: white;
     font-size: 12px;
     margin-left: 20px;
 }
 
 .right{
     float: right;
-    background-color: #d1e3e4;
+    background-color: white;
 }
 
 .left{
     float: left;
-    background-color: #d8d6ea;
+    background-color: white;
 }
 
 @media only screen and (max-width: 900px) {
