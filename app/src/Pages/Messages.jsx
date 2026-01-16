@@ -13,8 +13,7 @@ import Call from '../Components/Call/Call';
 import './Messages.css';
 import CallModal from "../Components/Call/CallModal";
 
-const PROD = "production";
-const ENDPOINT = process.env.REACT_APP_ENV === PROD?"https://chatji.onrender.com/":"http://localhost:5000/";
+const ENDPOINT="https://chatji.onrender.com/";
 let socket;
 
 function Messages() {
